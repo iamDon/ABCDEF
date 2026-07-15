@@ -1,0 +1,141 @@
+{
+  "$comment": "Transcribed from Canva card images provided 2026-07-15. Move `color` values are read off the numbered circle badge on each move (gold/black/green) — please double-check these against the source cards, badge color on a couple of moves was hard to call precisely from the image.",
+  "cards": [
+    {
+      "id": "kenjto",
+      "name": "Kenjto",
+      "displayName": "Ken",
+      "cardType": "Character",
+      "tags": ["ESU"],
+      "species": "H",
+      "life": 190,
+      "defense": 30,
+      "powerLevel": 570,
+      "moves": [
+        {
+          "slot": 1,
+          "name": "Parkour Light Step",
+          "color": "gold",
+          "text": "The next 2 enemy turns -50 from damage."
+        },
+        {
+          "slot": 2,
+          "name": "Shadow Kick",
+          "color": "black",
+          "text": "Flip a coin 6x. Does 25 times the number of heads and 10 the number of tails."
+        },
+        {
+          "slot": 3,
+          "name": "Myst Cap Cannon",
+          "color": "gold",
+          "text": "Does 0 in Low Myst, 100 in Medium Myst and 200 in High Myst. (-10 from Ken's Life)"
+        }
+      ],
+      "ability": "Myst level is low, no boost. Myst level is medium, +50 to Life and +10 Defense. If the Myst level is high, then +150 to Life, -10 to Defense, and +25 to move number 2.",
+      "flavorText": "Ken, a Human ESU from Tokyo Japan"
+    },
+    {
+      "id": "skylle",
+      "name": "Skylle",
+      "cardType": "Character",
+      "tags": [],
+      "species": "Nu",
+      "life": 200,
+      "defense": 50,
+      "powerLevel": 525,
+      "moves": [
+        {
+          "slot": 1,
+          "name": "Clear Eyes, Full Heart",
+          "color": "black",
+          "text": "Wait 1 turn. Next attack does +50."
+        },
+        {
+          "slot": 2,
+          "name": "Angel Riffle",
+          "color": "gold",
+          "text": "Does 75 to one enemy.",
+          "_uncertain": "Badge color read as gold, but this reads like a rifle/weapon (normally Black per the rulebook's tech convention) — please confirm."
+        },
+        {
+          "slot": 3,
+          "name": "Air Renzo-Zuken",
+          "color": "gold",
+          "text": "Flip a coin. Does 25 x the number of Heads. Flip 6 times.",
+          "_uncertain": "Badge color unclear from image — could be gold or black, please confirm."
+        }
+      ],
+      "ability": null,
+      "flavorText": "Capheru Skylle Haven. A.N.G.E.L.S. of the Holy Nublian Empire"
+    },
+    {
+      "id": "wilhelm",
+      "name": "Wilhelm",
+      "epithet": "The Coffin Monk",
+      "cardType": "Commander",
+      "tags": [],
+      "species": "3S/H",
+      "life": 500,
+      "defense": 125,
+      "powerLevel": 1075,
+      "moves": [
+        {
+          "slot": 1,
+          "name": "Giant War Hammer Smash",
+          "color": "black",
+          "text": "Wait 1 turn. Next turn does 200 to one enemy and -100 to Wilhelm's Life."
+        },
+        {
+          "slot": 2,
+          "name": "Ngombe Ngulu Cut",
+          "color": "green",
+          "usesLimit": 10,
+          "text": "Roll a d6 or d10. If the player rolls an even number, 100 to all enemies; if odd number, 150 to one enemy."
+        },
+        {
+          "slot": 3,
+          "name": "Doge and Counter",
+          "color": "green",
+          "usesLimit": 3,
+          "text": "One enemy card loses 2 turns. During the player's next 2 turns Wilhelm's attacks are +100, and on the final turn his attack is +200.",
+          "_uncertain": "Card text reads 'Doge and Counter' — likely a typo for 'Dodge and Counter', please confirm intended spelling."
+        }
+      ],
+      "ability": "Roll a d6 or a d10. If the player rolls a 4 or a 10, they can summon the Coffin. If the summon is successful, Wilhelm and the Coffin each lose 1 turn.",
+      "flavorText": "Wilhelm von Kovář, the 9th Ranked VixTen Commander"
+    },
+    {
+      "id": "independence-dragon",
+      "name": "Independence Dragon",
+      "cardType": "Character",
+      "tags": [],
+      "species": "D",
+      "life": 1000,
+      "defense": 500,
+      "powerLevel": 3000,
+      "moves": [
+        {
+          "slot": 1,
+          "name": "Dragon Fireworks",
+          "color": "black",
+          "text": "Wait 1 turn, then 300 to one enemy."
+        },
+        {
+          "slot": 2,
+          "name": "Red, White and Doom",
+          "color": "green",
+          "text": "Wait 2 turns; on the 3rd turn, 500 to all enemies."
+        },
+        {
+          "slot": 3,
+          "name": "Grand Finale",
+          "color": "green",
+          "usesLimit": 3,
+          "text": "Wait 3 turns. On the 4th turn, heal Independence Dragon by 200 and then do 700 to all enemies."
+        }
+      ],
+      "ability": "Myst levels have no effect on Independence Dragon. If fighting another dragon, subtract 100 from starting Defense.",
+      "flavorText": "Fireworks celebrating independence? Why disturb my slumber?"
+    }
+  ]
+}

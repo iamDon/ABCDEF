@@ -1,12 +1,14 @@
 {
-  "$comment": "Transcribed from Canva card images provided 2026-07-15. Move colors confirmed 2026-07-15. Wilhelm's move 3 name pending spelling confirmation (Doge vs Dodge and Counter).",
+  "$comment": "Transcribed from Canva card images provided 2026-07-15, plus the full 'ABCDEF Cards' Google Drive folder pulled the same day. Where a character had multiple Drive file revisions (Ken, Li-Ola, Skylle Heavy Neo Bird Mode), the most-recently-created file was treated as canonical per user direction; see per-card _note fields for details on what differed between revisions. Cards without visible move-color badges in the source text (most non-Character card types) omit the `color` field pending confirmation against the actual images.",
   "cards": [
     {
       "id": "kenjto",
       "name": "Kenjto",
       "displayName": "Ken",
       "cardType": "Character",
-      "tags": ["ESU"],
+      "tags": [
+        "ESU"
+      ],
       "species": "H",
       "life": 190,
       "defense": 30,
@@ -32,7 +34,8 @@
         }
       ],
       "ability": "Myst level is low, no boost. Myst level is medium, +50 to Life and +10 Defense. If the Myst level is high, then +150 to Life, -10 to Defense, and +25 to move number 2.",
-      "flavorText": "Ken, a Human ESU from Tokyo Japan"
+      "flavorText": "Ken, a Human ESU from Tokyo Japan",
+      "image": "assets/cards/kenjto.png"
     },
     {
       "id": "skylle",
@@ -64,7 +67,8 @@
         }
       ],
       "ability": null,
-      "flavorText": "Capheru Skylle Haven. A.N.G.E.L.S. of the Holy Nublian Empire"
+      "flavorText": "Capheru Skylle Haven. A.N.G.E.L.S. of the Holy Nublian Empire",
+      "image": "assets/cards/skylle.png"
     },
     {
       "id": "wilhelm",
@@ -92,15 +96,15 @@
         },
         {
           "slot": 3,
-          "name": "Doge and Counter",
+          "name": "Dodge and Counter",
           "color": "green",
           "usesLimit": 3,
-          "text": "One enemy card loses 2 turns. During the player's next 2 turns Wilhelm's attacks are +100, and on the final turn his attack is +200.",
-          "_uncertain": "Card text reads 'Doge and Counter' — likely a typo for 'Dodge and Counter', please confirm intended spelling."
+          "text": "One enemy card loses 2 turns. During the player's next 2 turns Wilhelm's attacks are +100, and on the final turn his attack is +200."
         }
       ],
       "ability": "Roll a d6 or a d10. If the player rolls a 4 or a 10, they can summon the Coffin. If the summon is successful, Wilhelm and the Coffin each lose 1 turn.",
-      "flavorText": "Wilhelm von Kovář, the 9th Ranked VixTen Commander"
+      "flavorText": "Wilhelm von Kovář, the 9th Ranked VixTen Commander",
+      "image": "assets/cards/wilhelm.png"
     },
     {
       "id": "independence-dragon",
@@ -133,7 +137,549 @@
         }
       ],
       "ability": "Myst levels have no effect on Independence Dragon. If fighting another dragon, subtract 100 from starting Defense.",
-      "flavorText": "Fireworks celebrating independence? Why disturb my slumber?"
+      "flavorText": "Fireworks celebrating independence? Why disturb my slumber?",
+      "image": "assets/cards/independence-dragon.png"
+    },
+    {
+      "id": "skylle-lv1-armor",
+      "name": "Skylle",
+      "epithet": "Lv. 1 Armor",
+      "cardType": "Character",
+      "tags": [
+        "Armor"
+      ],
+      "species": "Nu",
+      "life": 350,
+      "defense": 150,
+      "powerLevel": 795,
+      "moves": [
+        {
+          "slot": 1,
+          "name": "Clear Eyes, Full Heart",
+          "color": "black",
+          "text": "Wait 1 turn. Next attack does +60."
+        },
+        {
+          "slot": 2,
+          "name": "Angel Riffle",
+          "color": "gold",
+          "text": "Does 85 to one enemy. Ignore Defense."
+        },
+        {
+          "slot": 3,
+          "name": "Air Renzo-Zuken",
+          "color": "gold",
+          "text": "Flip a coin 6x. Does 35 x the number of Heads."
+        }
+      ],
+      "ability": null,
+      "flavorText": "Capheru Skylle Haven. A.N.G.E.L.S. Armor Level 1",
+      "_note": "Dual-form pairing with base Skylle per GAME_RULES.md — table agreement decides whether this replaces or is fielded alongside the base card.",
+      "image": "assets/cards/skylle-lv1-armor.png"
+    },
+    {
+      "id": "skylle-heavy-neo-bird-mode",
+      "name": "Skylle Heavy Neo Bird Mode",
+      "cardType": "Weapon",
+      "species": "Nu",
+      "attachesTo": "skylle",
+      "moves": [
+        {
+          "slot": 1,
+          "name": "Vulcan Strike",
+          "text": "Target 1 enemy, does 100 + their full Defense at start of fight."
+        },
+        {
+          "slot": 2,
+          "name": "Air Raid",
+          "text": "Wait 1 turn. Does 175 to all enemies."
+        },
+        {
+          "slot": 3,
+          "name": "Air Superiority",
+          "text": "If fighting an enemy that is using an Item or Weapon card, +30 to all attacks."
+        }
+      ],
+      "ability": "Once this card is played, Skylle can only use one move per turn from either this card or Level 2 Ascended Armor. When Skylle is defeated, this card is removed from the BF.",
+      "flavorText": "Skylle's Heavy Neo Bird Mode",
+      "_note": "Two Drive revisions existed; used the one including move 3 'Air Superiority' (later createdTime) per 'newest file wins.' Move colors not visible in source text extraction — confirm against the card image.",
+      "image": "assets/cards/skylle-heavy-neo-bird-mode.png"
+    },
+    {
+      "id": "wilhelms-coffin",
+      "name": "Wilhelm's Coffin",
+      "cardType": "Weapon",
+      "species": "3S",
+      "attachesTo": "wilhelm",
+      "moves": [
+        {
+          "slot": 1,
+          "name": "Drunken Bones",
+          "text": "The player of this card loses 1 turn."
+        },
+        {
+          "slot": 2,
+          "name": "Skeleton Dash",
+          "text": "Wilhelm only. Wait 4 turns; on the 5th turn does 200 to all enemies plus an action from Wilhelm."
+        }
+      ],
+      "ability": "Once this card is played, the next 2 enemy character cards that Wilhelm defeats, instead of going to the opposing Graveyard, are converted into Skeleton cards for the player of this card and can be used on the BF as their own. If defeated, they go back to the opposing Graveyard. If Wilhelm is defeated, this card's effect is cancelled.",
+      "flavorText": "The Coffin Monk's Summon",
+      "_note": "Printed card type is Weapon but flavor text calls it a Summon — confirm intended card type.",
+      "image": "assets/cards/wilhelms-coffin.png"
+    },
+    {
+      "id": "godiva",
+      "name": "Godiva",
+      "cardType": "Commander",
+      "species": "3S",
+      "life": 550,
+      "defense": 125,
+      "powerLevel": 1450,
+      "moves": [
+        {
+          "slot": 1,
+          "name": "Soul Eye",
+          "usesLimit": 3,
+          "text": "All enemies lose 1 turn and their Defense is -50."
+        },
+        {
+          "slot": 2,
+          "name": "She Quan Fist Combo",
+          "text": "Flip a coin 9x. Does 50 for each heads and 25 for each tails."
+        },
+        {
+          "slot": 3,
+          "name": "Gold Aurum Discs",
+          "color": "black",
+          "usesLimit": 10,
+          "text": "1st turn does 150 to all enemies; next enemy attack does -25. 2nd turn does 175 to all enemies."
+        }
+      ],
+      "ability": "All enemies lose 15 Life whenever they do a damage attack to Godiva, for as long as Godiva is alive. (Ignores Defense.)",
+      "flavorText": "Happiness \"Godiva\" Rahemzeda. 1st Ranked Commander of the VixTen",
+      "_note": "This is 'Diva' referenced in GAME_RULES.md (Gold Aurum Discs, marked black/internally-powered per the Rós-Fhiadhain exception).",
+      "image": "assets/cards/godiva.png"
+    },
+    {
+      "id": "addie",
+      "name": "Addie",
+      "displayName": "Dr. Ankhet \"Addie\" Adyuvar",
+      "cardType": "Commander",
+      "species": "3S",
+      "life": "300 + total of all enemies' Defense",
+      "defense": "Half of her current Life",
+      "powerLevel": "??",
+      "moves": [
+        {
+          "slot": 1,
+          "name": "Chemical Elephant Husk",
+          "text": "1st turn does 75 to one enemy. Next turn heal Adyuvar by 75 and does 50 to all enemies."
+        },
+        {
+          "slot": 2,
+          "name": "Censorship",
+          "usesLimit": 3,
+          "text": "One enemy is unable to use one move (their choice) for the remainder of the battle."
+        },
+        {
+          "slot": 3,
+          "name": "Abdominal Maw",
+          "text": "For the next 2 opponent turns, track total damage done to Adyuvar. On the player's next turn, deal that damage + 300 to all enemies."
+        }
+      ],
+      "ability": "At the start of the match, for the first 4 opponent turns all damage done to Adyuvar is halved. When her Life drops below 100, +175 to move number 1 for the remainder of the match.",
+      "flavorText": "Dr. Ankhet \"Addie\" Ram Sahwaht Adyuvar Heru. 7th Ranked VixTen Commander",
+      "_note": "Life/Defense/PL are formulas rather than fixed numbers, printed as strings here — engine will need to compute these at match start.",
+      "image": "assets/cards/addie.png"
+    },
+    {
+      "id": "vindrstormr",
+      "name": "Vindrstormr",
+      "cardType": "Summon",
+      "species": "3S",
+      "summonedBy": "pandorrahs-box",
+      "life": 500,
+      "defense": 150,
+      "powerLevel": 925,
+      "moves": [
+        {
+          "slot": 1,
+          "name": "Violent Gale",
+          "text": "Does 75 to all enemies."
+        },
+        {
+          "slot": 2,
+          "name": "Storm Bringer",
+          "text": "Wait 1 turn. Increases Vindrstormr's, Pandorrah's, and Röykjötunn's next attack by +150 each."
+        },
+        {
+          "slot": 3,
+          "name": "Storm Ender",
+          "text": "Wait 2 turns. On the 3rd turn does 200 to all enemies."
+        }
+      ],
+      "ability": "Once this card is played, heal Pandora (or +50 Life if already full). Once this card, Pandora, and Röykjötunn are all on the BF at the same time, +25 Defense to each.",
+      "flavorText": "Pandorrah's Box Summon: the Wind Monster",
+      "image": "assets/cards/vindrstormr.png"
+    },
+    {
+      "id": "roykjotunn",
+      "name": "Röykjötunn",
+      "cardType": "Summon",
+      "species": "3S",
+      "summonedBy": "pandorrahs-box",
+      "life": 350,
+      "defense": 100,
+      "powerLevel": 750,
+      "moves": [
+        {
+          "slot": 1,
+          "name": "Smoke Assault",
+          "text": "All enemies lose one turn."
+        },
+        {
+          "slot": 2,
+          "name": "Smoke Filled Atmosphere",
+          "text": "For the next 3 opponent turns, -50 from total damage; for the next 3 player turns, +25 to all damage."
+        },
+        {
+          "slot": 3,
+          "name": "Smoke Siege",
+          "text": "1st turn does 50 to all enemies. Next turn does 100 to all enemies. 3rd turn does 150 to all enemies."
+        }
+      ],
+      "ability": "When this card is played, heal Pandora's Life by 25. When this card, Pandora, and Vindrstormr are all on the BF at the same time, every 4 turns heal all 3 by 20 each.",
+      "flavorText": "Pandorrah's Box Summon: the Smoke Titan",
+      "image": "assets/cards/roykjotunn.png"
+    },
+    {
+      "id": "pandorrahs-box",
+      "name": "Pandorrah's Box",
+      "cardType": "Weapon",
+      "species": "3S",
+      "attachesTo": "pandora",
+      "moves": [
+        {
+          "slot": 1,
+          "name": "Summon Vindrstormr",
+          "text": "Flip a coin 4 times. If the player flips 3 tails, they can summon Vindrstormr. If successful, Pandora can take another action this turn."
+        },
+        {
+          "slot": 2,
+          "name": "Summon Röykjötunn",
+          "text": "Roll a die. If the player rolls a 2, 3, or 9, they can summon Röykjötunn. If successful, heal Pandora by 100 Life."
+        }
+      ],
+      "ability": "Once this card is played, +25 to Pandora's Defense. Once Vindrstormr and Röykjötunn are both on the BF, the player may take 3 actions in one turn, as long as they come from Pandora and her summons.",
+      "flavorText": "Pandora's Weapon",
+      "image": "assets/cards/pandorrahs-box.png"
+    },
+    {
+      "id": "pandora",
+      "name": "Pandora",
+      "displayName": "Pandorrah",
+      "cardType": "Commander",
+      "species": "3S",
+      "life": 350,
+      "defense": 100,
+      "powerLevel": 925,
+      "moves": [
+        {
+          "slot": 1,
+          "name": "Winder Blast",
+          "text": "Does 25 to one enemy."
+        },
+        {
+          "slot": 2,
+          "name": "Haute Cutter",
+          "usesLimit": 10,
+          "text": "1st turn does 50 to all enemies. Next turn does 75 to all enemies and +5 Defense to all allies."
+        },
+        {
+          "slot": 3,
+          "name": "Capoeira Combo",
+          "text": "Flip a coin 5x. Each heads does 50 to one enemy; each tails does 20 to all enemies."
+        }
+      ],
+      "ability": "Roll a die. If you roll a 1, 5, or 8, you can summon Pandorrah's Box (rolling the die takes up a turn). If successful, heal Pandora by 100 Life.",
+      "flavorText": "Pandorrah \"Pandora,\" the 5th Ranked VixTen Commander",
+      "image": "assets/cards/pandora.png"
+    },
+    {
+      "id": "benz",
+      "name": "Benz",
+      "displayName": "Bia \"Benz\" Ben",
+      "cardType": "Commander",
+      "species": "3S",
+      "life": 385,
+      "defense": 125,
+      "powerLevel": 1210,
+      "moves": [
+        {
+          "slot": 1,
+          "name": "Elleh Azulu",
+          "text": "Does 100 to one enemy."
+        },
+        {
+          "slot": 2,
+          "name": "Magma of Might",
+          "text": "1st turn does 50 to all enemies. Next turn does 150 to all enemies and +10 to Benz's Defense."
+        },
+        {
+          "slot": 3,
+          "name": "Molten Fury Release",
+          "usesLimit": 5,
+          "text": "Wait 2 turns. On the 3rd turn does 200 to all enemies and resets Benz's Life to 300. The next turn does 200 to all enemies and -25 to Benz's Defense."
+        }
+      ],
+      "ability": "Every 2nd turn of Benz's, flip a coin. Heads: all moves do +20 damage. This does not take up the turn, and continues uninterrupted until she is defeated.",
+      "flavorText": "Bia \"Benz\" Ben, 8th Ranked VixTen Commander",
+      "image": "assets/cards/benz.png"
+    },
+    {
+      "id": "xinyu",
+      "name": "Xinyu",
+      "cardType": "Commander",
+      "species": "3S",
+      "life": 150,
+      "defense": 20,
+      "powerLevel": 870,
+      "moves": [
+        {
+          "slot": 1,
+          "name": "Telekinesis Crush",
+          "text": "Does 100 to all enemies. Ignores Defense."
+        },
+        {
+          "slot": 2,
+          "name": "Assassin Ambush",
+          "text": "Wait 2 turns; during those turns Xinyu's Defense is +200. On the 3rd turn does 200 to all enemies."
+        },
+        {
+          "slot": 3,
+          "name": "Dandelions and Peace",
+          "usesLimit": 6,
+          "text": "Offer to return all Battlefield cards (both players') to hand; if the opponent agrees, all BF cards return to hand and new cards are drawn (fight restarts). If they refuse, does 400 to all enemies instead."
+        }
+      ],
+      "ability": null,
+      "flavorText": "Xinyu, the 4th Ranked Commander of the VixTen",
+      "image": "assets/cards/xinyu.png"
+    },
+    {
+      "id": "water-titan",
+      "name": "Water Titan",
+      "cardType": "Titan",
+      "tags": [
+        "Item"
+      ],
+      "life": 1000,
+      "defense": 600,
+      "powerLevel": 1600,
+      "moves": [],
+      "ability": "Once on the Battlefield, Water Titan changes the Myst level to High: +500 Life and +100 to all moves for every card in play. All other Item cards are suspended. If an ESU is on the BF, -20 to their Life every turn the controlling player takes an action.",
+      "flavorText": "The entire Pacific Rim will be destroyed! An ancient monster awakens!",
+      "_note": "Printed as Titan/Item; source text had no numbered moves separate from the Ability.",
+      "image": "assets/cards/water-titan.png"
+    },
+    {
+      "id": "seven",
+      "name": "Seven",
+      "cardType": "Character",
+      "species": "H",
+      "life": 185,
+      "defense": 15,
+      "powerLevel": 375,
+      "moves": [
+        {
+          "slot": 1,
+          "name": "Mean Uppercut",
+          "text": "Does 100 to one enemy. Seven loses a turn."
+        },
+        {
+          "slot": 2,
+          "name": "Deadman Strike",
+          "text": "Does 50 to all enemies. Next turn does 25 to one enemy."
+        },
+        {
+          "slot": 3,
+          "name": "Zoo Phi Furry",
+          "text": "Powers up Seven's next three attacks by 25."
+        }
+      ],
+      "ability": "If Kio is played as an ally on the BF, +15 current Life for both and +10 damage to all moves. Your team may perform up to 3 actions per turn instead of 2.",
+      "flavorText": "Kio's twin brother. Zoo Phi!",
+      "_note": "Species inferred from twin Kio's printed 'H' badge — Seven's card only clearly showed the EF logo mark in source text, not a species badge.",
+      "image": "assets/cards/seven.png"
+    },
+    {
+      "id": "may",
+      "name": "May",
+      "cardType": "Character",
+      "species": "3S",
+      "life": 210,
+      "defense": 30,
+      "powerLevel": 360,
+      "moves": [
+        {
+          "slot": 1,
+          "name": "Ground Effect Slash",
+          "text": "Does 25 to one enemy."
+        },
+        {
+          "slot": 2,
+          "name": "Death From Above",
+          "text": "Does 25 to one enemy. Next turn does 100 to all enemies."
+        },
+        {
+          "slot": 3,
+          "name": "Scout Ahead",
+          "text": "Opponent is forced to show the cards in their hand. Enemies lose 1 turn."
+        }
+      ],
+      "ability": "If an opponent has more than one character card on the field (including summons and monsters), only one move/action from all of their cards can go per turn.",
+      "flavorText": "May of the Dhahab-Ard Clan. The Sacred Rebel",
+      "image": "assets/cards/may.png"
+    },
+    {
+      "id": "makh",
+      "name": "Makh",
+      "epithet": "Level 2 Ascended Armor",
+      "cardType": "Character",
+      "species": "Nu",
+      "life": 400,
+      "defense": 195,
+      "powerLevel": 1290,
+      "moves": [
+        {
+          "slot": 1,
+          "name": "Giant Mortar Cannon",
+          "text": "Does 100 to all enemies."
+        },
+        {
+          "slot": 2,
+          "name": "Hammer Clash",
+          "text": "Roll a die. On a 1, 5, or 8, does 75 to one enemy. Otherwise does 50 to all enemies."
+        },
+        {
+          "slot": 3,
+          "name": "Heavy Kinetic Natr",
+          "usesLimit": 8,
+          "text": "1st turn 50 to one enemy. Next turn 75 to same enemy. 3rd turn 120 to same enemy. 4th turn 225 to same enemy. After turn 2, ignores enemy Defense."
+        }
+      ],
+      "ability": "If facing another Nu, +20 to Makh's Defense and +20 to move number 2.",
+      "flavorText": "Makh of Sorrow | A.N.G.E.L.S.",
+      "image": "assets/cards/makh.png"
+    },
+    {
+      "id": "li-ola",
+      "name": "Li-Ola",
+      "displayName": "Lola",
+      "cardType": "Commander",
+      "species": "E",
+      "life": "8 (player turns)",
+      "defense": "??",
+      "powerLevel": "??",
+      "moves": [
+        {
+          "slot": 1,
+          "name": "Dream Ruin",
+          "usesLimit": 3,
+          "text": "+100 to all enemies' and allies' moves and Life."
+        },
+        {
+          "slot": 2,
+          "name": "Dream Escape",
+          "text": "Flip a coin 10x. If 3 heads, Li-Ola goes back to the deck. If tails, -25 to enemies' Life. Bypasses Defense."
+        },
+        {
+          "slot": 3,
+          "name": "Dream Song and Dance",
+          "text": "If the players' actual real-world local time is between 11am-7pm, does nothing. Otherwise, both Li-Ola and the enemy return to hand."
+        }
+      ],
+      "ability": null,
+      "flavorText": "Lola \"Reme,\" 2nd Ranked VixTen Commander. Ancient Elf",
+      "_note": "3 Drive revisions exist. Used the latest-created file ('Li-Ola.png'), which has no printed Ability and Life '8 turns.' Two earlier revisions ('Li-Ola 2.png', 'Li-Ola 3.png') included an Ability letting her roll a die (1/3/7) to take a Character card straight from the opponent's hand onto the BF, and a coin-flip variant of move 3 — that Ability is NOT in this version. Flag if that was dropped unintentionally, since it's a meaningful power change, not just wording.",
+      "image": "assets/cards/li-ola.png"
+    },
+    {
+      "id": "kio",
+      "name": "Kio",
+      "cardType": "Character",
+      "species": "H",
+      "life": 190,
+      "defense": 10,
+      "powerLevel": 335,
+      "moves": [
+        {
+          "slot": 1,
+          "name": "Shadow Gun Gut Punch",
+          "text": "Does 50 to one enemy."
+        },
+        {
+          "slot": 2,
+          "name": "Karate & Muay Thai",
+          "text": "Does 10 to one enemy this turn. Next turn does 75 to one enemy."
+        },
+        {
+          "slot": 3,
+          "name": "Zoo Phi Zealot",
+          "text": "Enemy loses 1 turn. Next Kio turn, powers up the next attack by 50."
+        }
+      ],
+      "ability": "If Seven is played as an ally on the BF, +15 current Life for both and +10 to all moves. Player's team can now do 3 actions in one turn. Cannot use move number 3.",
+      "flavorText": "Seven's twin brother. Zoo Phi!",
+      "image": "assets/cards/kio.png"
+    },
+    {
+      "id": "yamabe",
+      "name": "Yamabe",
+      "displayName": "Daisuke \"Yamabe\" Jeff Kobayashi",
+      "cardType": "Character",
+      "species": "H",
+      "life": 200,
+      "defense": 10,
+      "powerLevel": 370,
+      "moves": [
+        {
+          "slot": 1,
+          "name": "Quick Slash",
+          "text": "Does 40 to one enemy."
+        },
+        {
+          "slot": 2,
+          "name": "Espionage & Charm",
+          "text": "All enemies' Defense is -20."
+        },
+        {
+          "slot": 3,
+          "name": "Gun Fu Ran",
+          "text": "Flip a coin 6x. Does 20 x the number of heads and 10 x the number of tails."
+        }
+      ],
+      "ability": null,
+      "flavorText": "Daisuke \"Yamabe\" Jeff Kobayashi. Chimera Sin secret agent",
+      "_note": "Source file was named 'Ken Card.png' in Drive but the printed content is Yamabe, not Ken — looks like a misfiled upload.",
+      "image": "assets/cards/yamabe.png"
+    },
+    {
+      "id": "mental-fortitude",
+      "name": "Mental Fortitude",
+      "cardType": "Trap",
+      "ability": "When an enemy move would cause one of your cards to lose a turn, negate that effect.",
+      "flavorText": "Be Strong!",
+      "image": "assets/cards/mental-fortitude.png"
+    },
+    {
+      "id": "counterspell",
+      "name": "Counterspell",
+      "cardType": "Trap",
+      "ability": "Negate the activation of one Ability or Trap card.",
+      "flavorText": "No more abilities in this fight.",
+      "image": "assets/cards/counterspell.png"
     }
   ]
 }

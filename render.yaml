@@ -4,6 +4,6 @@ services:
     runtime: node
     plan: free
     branch: claude/abcdef-card-game-kay002
-    buildCommand: npm install && npm run build
+    buildCommand: npm install --include=dev && npm run build
     startCommand: npm start
     healthCheckPath: /api/cards

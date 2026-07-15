@@ -54,7 +54,7 @@ Every push to the deployed branch auto-redeploys.
 
 > **Free-tier note:** Render spins the server down after ~15 minutes idle. The first visit after that takes ~30-60 seconds to wake up — just wait, it's not broken. Also, an active game lives in server memory, so a spin-down between sessions clears old rooms (fine for casual play).
 
-Any other Node host with WebSocket support (Railway, Fly.io, a VPS) also works: build with `npm install && npm run build`, start with `npm start`, port comes from the `PORT` env var.
+Any other Node host with WebSocket support (Railway, Fly.io, a VPS) also works: build with `npm install --include=dev && npm run build`, start with `npm start`, port comes from the `PORT` env var.
 
 ## Project layout
 

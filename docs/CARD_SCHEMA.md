@@ -43,4 +43,4 @@ Derived from the Canva card layout (Kenjto, Skylle, Wilhelm, Independence Dragon
 
 ## Open transcription questions
 
-A couple of fields on the first batch of cards were ambiguous from the image and are flagged inline in `data/cards.json` via `_uncertain` — mainly move badge color on 2 of Skylle's moves, and a likely typo ("Doge and Counter" → "Dodge and Counter?") on Wilhelm. Confirm/correct these once, and future cards can follow the same schema without re-litigating it.
+Move badge colors on the first batch of cards are confirmed. Still open: whether Wilhelm's move 3, "Doge and Counter," is printed as-is or should read "Dodge and Counter."

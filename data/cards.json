@@ -1,5 +1,5 @@
 {
-  "$comment": "Transcribed from Canva card images provided 2026-07-15. Move `color` values are read off the numbered circle badge on each move (gold/black/green) — please double-check these against the source cards, badge color on a couple of moves was hard to call precisely from the image.",
+  "$comment": "Transcribed from Canva card images provided 2026-07-15. Move colors confirmed 2026-07-15. Wilhelm's move 3 name pending spelling confirmation (Doge vs Dodge and Counter).",
   "cards": [
     {
       "id": "kenjto",
@@ -54,15 +54,13 @@
           "slot": 2,
           "name": "Angel Riffle",
           "color": "gold",
-          "text": "Does 75 to one enemy.",
-          "_uncertain": "Badge color read as gold, but this reads like a rifle/weapon (normally Black per the rulebook's tech convention) — please confirm."
+          "text": "Does 75 to one enemy."
         },
         {
           "slot": 3,
           "name": "Air Renzo-Zuken",
           "color": "gold",
-          "text": "Flip a coin. Does 25 x the number of Heads. Flip 6 times.",
-          "_uncertain": "Badge color unclear from image — could be gold or black, please confirm."
+          "text": "Flip a coin. Does 25 x the number of Heads. Flip 6 times."
         }
       ],
       "ability": null,

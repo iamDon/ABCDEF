@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { cardImg, wallpaperUrl } from '../img.js';
 
 const HAND_SIZE = 5;
 
@@ -24,7 +25,7 @@ export default function CardSelect({ view, playableCards, onAction }) {
 
   return (
     <div className="screen" style={{ justifyContent: 'flex-start' }}>
-      <div className="screen-bg" style={{ backgroundImage: "url('/assets/wallpapers/the-full-vix.png')" }} />
+      <div className="screen-bg" style={{ backgroundImage: `url('${wallpaperUrl('the-full-vix')}')` }} />
       <h1 className="title" style={{ fontSize: '2.2rem' }}>
         Choose Your Hand
       </h1>
@@ -39,7 +40,7 @@ export default function CardSelect({ view, playableCards, onAction }) {
             className={`mini-card ${selected.includes(card.id) ? 'selected' : ''}`}
             onClick={() => toggle(card.id)}
           >
-            <img src={`/${card.image}`} alt={card.name} />
+            <img src={cardImg(card)} alt={card.name} loading="lazy" />
             <div className="mini-info">
               <div className="name">{card.displayName || card.name}</div>
               <div className="stats">

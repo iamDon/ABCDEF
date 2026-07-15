@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { cardImg, wallpaperUrl, CARD_BACK } from '../img.js';
 
 function Bar({ value, max, className }) {
   const pct = max > 0 ? Math.max(0, Math.min(100, (value / max) * 100)) : 0;
@@ -24,7 +25,7 @@ function ActiveCardPanel({ label, cardId, state, card }) {
   }
   return (
     <div className="active-card-display">
-      <img src={`/${card.image}`} alt={card.name} />
+      <img src={cardImg(card)} alt={card.name} />
       <div style={{ flex: 1 }}>
         <div className="stat-line">
           <strong>{card.displayName || card.name}</strong>
@@ -56,12 +57,12 @@ function ZoneStrip({ label, items, cardsById, faceDown }) {
       {items.length === 0 && <span style={{ color: 'var(--text-dim)', fontSize: '0.8rem' }}>—</span>}
       {items.map((it, i) =>
         faceDown ? (
-          <img key={i} className="thumb back" src="/assets/cards/card-back.png" alt="face-down" />
+          <img key={i} className="thumb back" src={CARD_BACK} alt="face-down" />
         ) : (
           <img
             key={it.cardId}
             className={`thumb ${it.dead ? 'dead' : ''}`}
-            src={`/${cardsById.get(it.cardId)?.image}`}
+            src={cardImg(cardsById.get(it.cardId))}
             alt={cardsById.get(it.cardId)?.name}
             title={cardsById.get(it.cardId)?.name}
           />
@@ -183,7 +184,7 @@ export default function Battle({ view, cardsById, onAction }) {
       <div className="screen">
         <div
           className="screen-bg"
-          style={{ backgroundImage: `url('/assets/wallpapers/${won ? 'the-main-protagonists' : 'the-vix'}.png')` }}
+          style={{ backgroundImage: `url('${wallpaperUrl(won ? 'the-main-protagonists' : 'the-vix')}')` }}
         />
         <div className="panel game-over-panel">
           <h1 className="title" style={{ fontSize: '2.5rem' }}>
@@ -225,7 +226,7 @@ export default function Battle({ view, cardsById, onAction }) {
                 const card = cardsById.get(c.cardId);
                 return (
                   <div key={c.cardId} className="mini-card" onClick={() => !busy && doRedeploy(c.cardId)}>
-                    <img src={`/${card.image}`} alt={card.name} />
+                    <img src={cardImg(card)} alt={card.name} />
                     <div className="mini-info">
                       <div className="name">{card.displayName || card.name}</div>
                       <div className="stats">

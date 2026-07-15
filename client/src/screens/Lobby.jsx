@@ -1,9 +1,10 @@
 import React from 'react';
+import { wallpaperUrl } from '../img.js';
 
 export default function Lobby({ view }) {
   return (
     <div className="screen">
-      <div className="screen-bg" style={{ backgroundImage: "url('/assets/wallpapers/the-main-protagonists.png')" }} />
+      <div className="screen-bg" style={{ backgroundImage: `url('${wallpaperUrl('the-main-protagonists')}')` }} />
       <h1 className="title">ABCDEF</h1>
       <p className="subtitle">Waiting for opponent</p>
       <div className="panel" style={{ textAlign: 'center' }}>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { cardImg, wallpaperUrl } from '../img.js';
 
 export default function Deploy({ view, cardsById, onAction }) {
   const [busy, setBusy] = useState(false);
@@ -16,7 +17,7 @@ export default function Deploy({ view, cardsById, onAction }) {
 
   return (
     <div className="screen" style={{ justifyContent: 'flex-start' }}>
-      <div className="screen-bg" style={{ backgroundImage: "url('/assets/wallpapers/the-vix-upsidedown.png')" }} />
+      <div className="screen-bg" style={{ backgroundImage: `url('${wallpaperUrl('the-vix-upsidedown')}')` }} />
       <h1 className="title" style={{ fontSize: '2.2rem' }}>
         Send Out Your First Card
       </h1>
@@ -33,7 +34,7 @@ export default function Deploy({ view, cardsById, onAction }) {
             const card = cardsById.get(c.cardId);
             return (
               <div key={c.cardId} className="mini-card" onClick={() => !busy && deploy(c.cardId)}>
-                <img src={`/${card.image}`} alt={card.name} />
+                <img src={cardImg(card)} alt={card.name} loading="lazy" />
                 <div className="mini-info">
                   <div className="name">{card.displayName || card.name}</div>
                   <div className="stats">

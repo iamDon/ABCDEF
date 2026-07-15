@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { wallpaperUrl } from '../img.js';
 
 export default function Splash({ onAction }) {
   const [name, setName] = useState('');
@@ -27,7 +28,7 @@ export default function Splash({ onAction }) {
 
   return (
     <div className="screen">
-      <div className="screen-bg" style={{ backgroundImage: "url('/assets/wallpapers/the-vix-and-the-protagonists.png')" }} />
+      <div className="screen-bg" style={{ backgroundImage: `url('${wallpaperUrl('the-vix-and-the-protagonists')}')` }} />
       <h1 className="title">ABCDEF</h1>
       <p className="subtitle">A Battle Card Duel</p>
 

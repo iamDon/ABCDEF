@@ -30,6 +30,15 @@ const app = express();
 app.use('/assets', express.static(path.join(__dirname, '..', 'assets')));
 app.get('/api/cards', (req, res) => res.json({ playable: PLAYABLE_CARDS, all: ALL_CARDS }));
 
+// In production, serve the built client so the whole game runs as one process
+// (`npm run build` then `npm start`). In dev, Vite serves the client instead.
+const clientDist = path.join(__dirname, '..', 'client', 'dist');
+app.use(express.static(clientDist));
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api') || req.path.startsWith('/socket.io')) return next();
+  res.sendFile(path.join(clientDist, 'index.html'), (err) => (err ? next() : undefined));
+});
+
 const httpServer = createServer(app);
 const io = new Server(httpServer, { cors: { origin: '*' } });
 

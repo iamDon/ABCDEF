@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: abcdef-card-game
+    runtime: node
+    plan: free
+    branch: claude/abcdef-card-game-kay002
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/cards

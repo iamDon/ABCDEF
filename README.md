@@ -42,13 +42,19 @@ The Express server serves the built client, card assets, API, and WebSockets fro
 
 ## Deploying online (play from anywhere)
 
-Any Node host with WebSocket support works (Render, Railway, Fly.io, a VPS). The app is a standard single-port Node server:
+The repo includes a `render.yaml` blueprint for [Render](https://render.com)'s free tier (free Node hosting with WebSocket support):
 
-- **Build command:** `npm install && npm run build`
-- **Start command:** `npm start`
-- **Port:** set by the `PORT` env var automatically (defaults to 3001)
+1. Sign up at **render.com** — choose "Sign in with GitHub."
+2. Click **New → Blueprint**, and select the **ABCDEF** repository (grant Render access to it when prompted).
+3. Pick the branch containing the game (`render.yaml` currently points at `claude/abcdef-card-game-kay002` — update the `branch:` line if the game moves to `main`).
+4. Click **Apply**. Render builds and deploys automatically (~2-3 minutes).
+5. You get a public URL like `https://abcdef-card-game.onrender.com` — send it to a friend, both open it on your phones, one creates a game, the other joins with the room code. Works from anywhere, no shared Wi-Fi needed.
 
-Once deployed, both players just open the public URL on their phones — no same-Wi-Fi requirement.
+Every push to the deployed branch auto-redeploys.
+
+> **Free-tier note:** Render spins the server down after ~15 minutes idle. The first visit after that takes ~30-60 seconds to wake up — just wait, it's not broken. Also, an active game lives in server memory, so a spin-down between sessions clears old rooms (fine for casual play).
+
+Any other Node host with WebSocket support (Railway, Fly.io, a VPS) also works: build with `npm install && npm run build`, start with `npm start`, port comes from the `PORT` env var.
 
 ## Project layout
 

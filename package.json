@@ -1,6 +1,9 @@
 {
   "name": "abcdef-card-game",
   "private": true,
+  "engines": {
+    "node": ">=20"
+  },
   "workspaces": [
     "server",
     "client"

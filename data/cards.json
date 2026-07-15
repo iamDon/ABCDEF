@@ -225,7 +225,6 @@
       ],
       "ability": "Once this card is played, the next 2 enemy character cards that Wilhelm defeats, instead of going to the opposing Graveyard, are converted into Skeleton cards for the player of this card and can be used on the BF as their own. If defeated, they go back to the opposing Graveyard. If Wilhelm is defeated, this card's effect is cancelled.",
       "flavorText": "The Coffin Monk's Summon",
-      "_note": "Printed card type is Weapon but flavor text calls it a Summon — confirm intended card type.",
       "image": "assets/cards/wilhelms-coffin.png"
     },
     {
@@ -579,7 +578,7 @@
       "displayName": "Lola",
       "cardType": "Commander",
       "species": "E",
-      "life": "8 (player turns)",
+      "life": "7 (player turns)",
       "defense": "??",
       "powerLevel": "??",
       "moves": [
@@ -597,12 +596,11 @@
         {
           "slot": 3,
           "name": "Dream Song and Dance",
-          "text": "If the players' actual real-world local time is between 11am-7pm, does nothing. Otherwise, both Li-Ola and the enemy return to hand."
+          "text": "If the players' actual real-world local time is between 11am-7pm, does nothing. Otherwise, flip a coin — if heads, one enemy card and Li-Ola both return to hand."
         }
       ],
-      "ability": null,
+      "ability": "Roll a die. If the player rolls a 1, 3, or 7, they may look at the opponent's hand, choose one character card, and play it onto the BF under their control. Li-Ola loses 1 turn.",
       "flavorText": "Lola \"Reme,\" 2nd Ranked VixTen Commander. Ancient Elf",
-      "_note": "3 Drive revisions exist. Used the latest-created file ('Li-Ola.png'), which has no printed Ability and Life '8 turns.' Two earlier revisions ('Li-Ola 2.png', 'Li-Ola 3.png') included an Ability letting her roll a die (1/3/7) to take a Character card straight from the opponent's hand onto the BF, and a coin-flip variant of move 3 — that Ability is NOT in this version. Flag if that was dropped unintentionally, since it's a meaningful power change, not just wording.",
       "image": "assets/cards/li-ola.png"
     },
     {
@@ -662,7 +660,6 @@
       ],
       "ability": null,
       "flavorText": "Daisuke \"Yamabe\" Jeff Kobayashi. Chimera Sin secret agent",
-      "_note": "Source file was named 'Ken Card.png' in Drive but the printed content is Yamabe, not Ken — looks like a misfiled upload.",
       "image": "assets/cards/yamabe.png"
     },
     {

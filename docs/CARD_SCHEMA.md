@@ -57,9 +57,13 @@ Trap, Weapon, Summon, and Titan cards reuse the same base fields but not all of 
 
 Some cards print **formulas instead of fixed numbers** for `life`/`defense`/`powerLevel` (e.g. Addie: life = "300 + total of all enemies' Defense"; Li-Ola: defense/PL = "??"). These are stored as strings rather than numbers — the game engine will need a small formula-evaluation step for this handful of cards rather than assuming every stat is a plain integer.
 
+## Resolved transcription questions
+
+- Wilhelm's move 3 is "Dodge and Counter" (source card printed "Doge," corrected per user).
+- Li-Ola/Lola uses the revision with the opponent's-hand-stealing Ability (roll 1/3/7) and the coin-flip variant of move 3, confirmed per user.
+- Wilhelm's Coffin is a Weapon card (flavor text calling it a "Summon" is just flavor, not the card type).
+- Yamabe's Drive file was named "Ken Card.png" — confirmed as a misfiled/typo'd upload; game data is correctly filed under `yamabe`.
+
 ## Open transcription questions
 
-- Wilhelm's move 3, "Dodge and Counter," is confirmed (source card printed "Doge," corrected per user).
-- Several cards were transcribed from Google Drive's text extraction of the card images rather than the images themselves, so **move badge colors (gold/black/green) are missing** on most non-Character cards — these need visual confirmation once the actual image files are pulled into the repo.
-- Li-Ola/Lola has three Drive revisions with a real gameplay difference (an opponent's-hand-stealing Ability present in two older revisions, absent in the newest) — flagged in `data/cards.json`, worth double-checking it wasn't dropped by accident.
-- Wilhelm's Coffin is printed as a Weapon card but its flavor text calls it a "Summon" — card type needs confirming.
+- Several non-Character cards (Trap, Weapon, Summon, Titan) were transcribed from Google Drive's text extraction rather than the images, so **move badge colors (gold/black/green) are missing** on most of them. Per user direction, left alone for now — revisit later.

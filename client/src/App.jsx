@@ -48,7 +48,7 @@ export default function App() {
       setError('');
       return await emitAsync(event, payload);
     } catch (err) {
-      setError(err.message);
+      if (!err.needsInput) setError(err.message);
       throw err;
     }
   }, []);

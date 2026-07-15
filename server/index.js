@@ -12,10 +12,8 @@ import {
   selectCards,
   deployActive,
   performRoll,
-  applyDamage,
-  applyHeal,
-  adjustDefense,
-  setSkipNextTurn,
+  useMove,
+  respondOffer,
   addNote,
   selectNextActive,
   endTurn,
@@ -91,37 +89,19 @@ io.on('connection', (socket) => {
     broadcastRoom(room);
   });
 
-  socket.on('apply-damage', ({ targetPlayerIndex, targetCardId, amount, ignoreDefense }, ack) => {
+  socket.on('use-move', ({ slot, inputs }, ack) => {
     const room = getRoom(currentRoomCode(socket));
     if (!room) return ack?.({ ok: false, error: 'Room not found.' });
-    const result = applyDamage(room, socket.id, targetPlayerIndex, targetCardId, amount, !!ignoreDefense);
-    if (result.error) return ack?.({ ok: false, error: result.error });
-    ack?.({ ok: true });
+    const result = useMove(room, socket.id, Number(slot), inputs || {});
+    if (result.error) return ack?.({ ok: false, error: result.error, needsInput: result.needsInput });
+    ack?.({ ok: true, events: result.events });
     broadcastRoom(room);
   });
 
-  socket.on('apply-heal', ({ targetPlayerIndex, targetCardId, amount }, ack) => {
+  socket.on('respond-offer', ({ accept }, ack) => {
     const room = getRoom(currentRoomCode(socket));
     if (!room) return ack?.({ ok: false, error: 'Room not found.' });
-    const result = applyHeal(room, socket.id, targetPlayerIndex, targetCardId, amount);
-    if (result.error) return ack?.({ ok: false, error: result.error });
-    ack?.({ ok: true });
-    broadcastRoom(room);
-  });
-
-  socket.on('adjust-defense', ({ targetPlayerIndex, targetCardId, delta }, ack) => {
-    const room = getRoom(currentRoomCode(socket));
-    if (!room) return ack?.({ ok: false, error: 'Room not found.' });
-    const result = adjustDefense(room, socket.id, targetPlayerIndex, targetCardId, delta);
-    if (result.error) return ack?.({ ok: false, error: result.error });
-    ack?.({ ok: true });
-    broadcastRoom(room);
-  });
-
-  socket.on('set-skip-next-turn', ({ targetPlayerIndex }, ack) => {
-    const room = getRoom(currentRoomCode(socket));
-    if (!room) return ack?.({ ok: false, error: 'Room not found.' });
-    const result = setSkipNextTurn(room, socket.id, targetPlayerIndex);
+    const result = respondOffer(room, socket.id, !!accept);
     if (result.error) return ack?.({ ok: false, error: result.error });
     ack?.({ ok: true });
     broadcastRoom(room);

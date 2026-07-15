@@ -374,17 +374,41 @@ input[type='number'] {
   gap: 0.6rem;
 }
 
-.move-card {
+.moves-hint {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.move-btn {
   background: var(--bg-panel-2);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 0.75rem;
+  text-align: left;
+  color: var(--text);
+  font-size: 1rem;
+  width: 100%;
+  transition: border-color 0.15s, transform 0.1s;
 }
-.move-card .move-head {
+.move-btn:not(.disabled):hover,
+.move-btn:not(.disabled):active {
+  border-color: var(--orange);
+  transform: translateY(-1px);
+}
+.move-btn.disabled {
+  opacity: 0.45;
+}
+.move-btn .move-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 0.5rem;
+}
+.move-uses {
+  color: var(--gold);
+  font-size: 0.8rem;
+  white-space: nowrap;
 }
 .move-color-dot {
   width: 10px;
@@ -441,6 +465,115 @@ input[type='number'] {
   padding: 0.25rem 0.6rem;
   font-weight: 700;
   font-size: 0.85rem;
+}
+.roll-chip.heads {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.roll-chip.tails {
+  color: var(--text-dim);
+}
+.roll-chip.die {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+.chip-row {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  margin-top: 0.4rem;
+}
+.chip {
+  background: rgba(224, 177, 58, 0.12);
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  border-radius: 999px;
+  padding: 0.1rem 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+.chip.pending {
+  background: rgba(242, 139, 58, 0.1);
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+.quick-bar {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.results-banner {
+  background: var(--bg-panel);
+  border: 1px solid var(--orange);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.result-text {
+  font-weight: 700;
+}
+.result-text.damage {
+  color: var(--red);
+}
+.result-text.heal {
+  color: var(--green);
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 40;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.modal-sheet {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 16px 16px 0 0;
+  padding: 1.25rem 1rem calc(1.25rem + env(safe-area-inset-bottom));
+  width: 100%;
+  max-width: 560px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.modal-sheet h3 {
+  margin-top: 0;
+}
+.modal-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+.modal-actions .btn {
+  flex: 1 1 auto;
+  min-height: 44px;
+}
+
+.reveal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 0.5rem;
+}
+.reveal-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  text-align: center;
+}
+.reveal-card img {
+  width: 100%;
+  border-radius: 8px;
 }
 
 .log-panel {
@@ -544,29 +677,15 @@ input[type='number'] {
     width: 72px;
   }
 
-  .move-card {
+  .move-btn {
     padding: 0.6rem;
   }
-  .move-card .move-head {
+  .move-btn .move-head {
     flex-wrap: wrap;
   }
 
-  .tool-panel {
-    padding: 0.75rem;
-  }
-  .tool-row {
-    gap: 0.4rem;
-  }
-  .tool-row input[type='number'] {
-    width: 4.5rem !important;
-  }
-  .tool-row input[type='text'] {
-    min-width: 0;
-    flex: 1 1 100%;
-  }
-  .tool-row select {
-    flex: 1 1 auto;
-    min-width: 0;
+  .quick-bar .btn.small {
+    flex: 1 1 40%;
   }
 
   .log-panel {

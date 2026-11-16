@@ -9,14 +9,16 @@ try {
 }
 
 const config = loadConfig();
-const { handler } = compose(config);
+const { handler, emailConfigured } = compose(config);
 
 http.createServer(handler).listen(config.port, () => {
   console.log(`King Tide OS running at http://localhost:${config.port} (${config.dataMode} data)`);
-  if (config.dataMode === 'live' && config.users.length === 0) {
-    console.warn('No approved users configured. Set KTOS_USERS so someone can sign in.');
+  if (config.usingSampleUsers) {
+    console.log('Using the fictional sample founders. Add config/users.json to let the real founders sign in.');
+  } else if (!emailConfigured) {
+    console.warn('No mail server configured (SMTP_HOST): sign-in codes are written to this log instead of emailed.');
   }
-  if (config.dataMode === 'live' && config.showLoginCodes) {
-    console.warn('KTOS_SHOW_LOGIN_CODES is on with live data: sign-in codes are shown on screen. Turn it off outside demos.');
+  if (!config.usingSampleUsers && config.showLoginCodes) {
+    console.warn('KTOS_SHOW_LOGIN_CODES is on with real founders: sign-in codes are shown on screen. Turn it off outside demos.');
   }
 });

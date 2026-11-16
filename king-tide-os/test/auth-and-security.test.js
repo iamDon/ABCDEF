@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { readdir, readFile } from 'node:fs/promises';
 import { test } from 'node:test';
 import { AuthService } from '../server/auth/authService.js';
-import { ALL_SECRET_VALUES, fakeZoho, startApp, USERS } from './helpers.js';
+import { createSmtpCodeSender } from '../server/auth/codeSenders.js';
+import { ALL_SECRET_VALUES, fakeZoho, startApp, startFakeSmtp, USERS } from './helpers.js';
 
 test('Sign-in: correct code starts a session; sign-out ends it', async () => {
   const app = await startApp();
@@ -20,7 +21,7 @@ test('Sign-in: correct code starts a session; sign-out ends it', async () => {
 test('Sign-in: session cookie is HttpOnly and codes are not returned outside demo mode', async () => {
   const app = await startApp();
   try {
-    const requested = await app.request('/api/auth/request-code', { body: { email: 'ceo@test.example' } });
+    const requested = await app.request('/api/auth/request-code', { body: { email: 'ceo@test.example', role: 'CEO' } });
     assert.equal(requested.json.demoCode, undefined);
     const verified = await app.request('/api/auth/verify', { body: { email: 'ceo@test.example', code: app.sentCodes.get('ceo@test.example') } });
     assert.match(verified.headers.get('set-cookie'), /HttpOnly; SameSite=Lax/);
@@ -30,8 +31,8 @@ test('Sign-in: session cookie is HttpOnly and codes are not returned outside dem
 test('Sign-in: unapproved email gets the same reply, no code and no session', async () => {
   const app = await startApp();
   try {
-    const approved = await app.request('/api/auth/request-code', { body: { email: 'ceo@test.example' } });
-    const stranger = await app.request('/api/auth/request-code', { body: { email: 'stranger@elsewhere.example' } });
+    const approved = await app.request('/api/auth/request-code', { body: { email: 'ceo@test.example', role: 'CEO' } });
+    const stranger = await app.request('/api/auth/request-code', { body: { email: 'stranger@elsewhere.example', role: 'CEO' } });
     assert.deepEqual(stranger.json, approved.json);
     assert.equal(app.sentCodes.has('stranger@elsewhere.example'), false);
     const verify = await app.request('/api/auth/verify', { body: { email: 'stranger@elsewhere.example', code: '000000' } });
@@ -45,34 +46,146 @@ test('Sign-in: wrong, reused, expired and over-attempted codes are rejected', as
   const auth = new AuthService({ users: USERS, codeSender: async ({ code }) => { sent = code; }, now: () => now });
   const email = 'ceo@test.example';
 
-  await auth.requestCode(email);
+  await auth.requestCode(email, 'CEO');
   const wrong = sent === '000000' ? '000001' : '000000';
   assert.equal(auth.verifyCode(email, wrong), null);
   assert.ok(auth.verifyCode(email, sent));
   assert.equal(auth.verifyCode(email, sent), null, 'codes are single-use');
 
-  await auth.requestCode(email);
+  await auth.requestCode(email, 'CEO');
   now += 11 * 60 * 1000;
   assert.equal(auth.verifyCode(email, sent), null, 'codes expire after 10 minutes');
 
-  await auth.requestCode(email);
+  await auth.requestCode(email, 'CEO');
   const bad = sent === '000000' ? '000001' : '000000';
   for (let i = 0; i < 5; i += 1) auth.verifyCode(email, bad);
   assert.equal(auth.verifyCode(email, sent), null, 'locked after 5 wrong attempts');
 });
 
-test('R-04 role-based access: finance and integration status are limited by role', async () => {
+test('Sign-in: the email must belong to the chosen position', async () => {
+  const app = await startApp();
+  try {
+    const right = await app.request('/api/auth/request-code', { body: { email: 'cmo@test.example', role: 'CMO' } });
+    app.sentCodes.clear();
+    const wrong = await app.request('/api/auth/request-code', { body: { email: 'cmo@test.example', role: 'CEO' } });
+    assert.deepEqual(wrong.json, right.json, 'same reply either way');
+    assert.equal(app.sentCodes.size, 0, 'no code is sent for the wrong position');
+  } finally { await app.close(); }
+});
+
+test('Sign-in: any of a founder\'s email addresses works and gets the same role', async () => {
+  const app = await startApp();
+  try {
+    for (const email of ['ceo@test.example', 'CEO.Personal@test.example ']) {
+      const cookie = await app.signIn(email.trim().toLowerCase());
+      const me = await app.request('/api/me', { cookie });
+      assert.equal(me.json.user.role, 'CEO');
+      assert.equal(me.json.user.name, 'Casey CEO');
+    }
+  } finally { await app.close(); }
+});
+
+test('Sign-in: code requests are limited to 5 per email per 15 minutes', async () => {
+  let now = 0;
+  let sent = 0;
+  const auth = new AuthService({ users: USERS, codeSender: async () => { sent += 1; }, now: () => now });
+  for (let i = 0; i < 8; i += 1) await auth.requestCode('ceo@test.example', 'CEO');
+  assert.equal(sent, 5);
+  now += 16 * 60 * 1000;
+  await auth.requestCode('ceo@test.example', 'CEO');
+  assert.equal(sent, 6);
+});
+
+test('Sign-in: a mail failure gives a controlled message, not a crash', async () => {
+  const app = await startApp();
+  try {
+    app.failEmail();
+    const res = await app.request('/api/auth/request-code', { body: { email: 'ceo@test.example', role: 'CEO' } });
+    assert.equal(res.status, 503);
+    assert.match(res.json.message, /contact the admin/i);
+    assert.ok(!/smtp|password|ECONN/i.test(res.text));
+  } finally { await app.close(); }
+});
+
+test('Sign-in: codes are delivered through SMTP when a mail server is configured', async () => {
+  const smtp = await startFakeSmtp();
+  try {
+    const send = createSmtpCodeSender(
+      { host: '127.0.0.1', port: smtp.port, user: '', pass: '', from: 'admin@test.example' },
+      { secure: false, ignoreTLS: true },
+    );
+    await send({ email: 'ceo@test.example', name: 'Casey CEO', code: '123456' });
+    assert.equal(smtp.messages.length, 1);
+    assert.deepEqual(smtp.messages[0].to, ['ceo@test.example']);
+    assert.match(smtp.messages[0].data, /123456/);
+    assert.match(smtp.messages[0].data, /Hi Casey/);
+  } finally { await smtp.close(); }
+});
+
+// Each founder's dashboard: sections in the order they asked for.
+const VIEWS = {
+  'ceo@test.example': ['finance', 'communications', 'projects', 'customers'],
+  'cto@test.example': ['projects', 'finance', 'communications'],
+  'cmo@test.example': ['customers', 'finance', 'projects', 'links'],
+  'cpo@test.example': ['communications', 'calendar', 'customers', 'projects'],
+  'admin@test.example': ['customers', 'projects', 'communications', 'finance', 'calendar', 'integrations', 'access'],
+};
+const ALL_SECTIONS = ['customers', 'projects', 'communications', 'finance', 'calendar', 'integrations', 'access'];
+
+test('R-04 role-based access: each position sees its own sections, in order, and nothing else', async () => {
+  const app = await startApp({ zoho: fakeZoho({ records: [{ id: '1', Deal_Name: 'Acme' }] }) });
+  try {
+    for (const [email, sections] of Object.entries(VIEWS)) {
+      const cookie = await app.signIn(email);
+      const me = await app.request('/api/me', { cookie });
+      assert.deepEqual(me.json.user.sections, sections, `${email} section order`);
+      for (const section of ALL_SECTIONS) {
+        const expected = sections.includes(section) ? 200 : 403;
+        assert.equal((await app.request(`/api/${section}`, { cookie })).status, expected, `${email} -> ${section}`);
+      }
+    }
+    const cmo = await app.request('/api/me', { cookie: await app.signIn('cmo@test.example') });
+    assert.equal(cmo.json.user.links[0].url, 'https://social.zoho.com/');
+    for (const path of [...ALL_SECTIONS.map((s) => `/api/${s}`), '/api/me']) {
+      assert.equal((await app.request(path)).status, 401, `${path} requires sign-in`);
+    }
+  } finally { await app.close(); }
+});
+
+test('Announcements: CEO and admin can post and remove; others can only read', async () => {
   const app = await startApp();
   try {
     const ceo = await app.signIn('ceo@test.example');
-    const cmo = await app.signIn('cmo@test.example');
-    assert.equal((await app.request('/api/finance', { cookie: ceo })).status, 200);
-    assert.equal((await app.request('/api/finance', { cookie: cmo })).status, 403);
-    assert.equal((await app.request('/api/integrations', { cookie: cmo })).status, 403);
-    assert.equal((await app.request('/api/projects', { cookie: cmo })).status, 200);
-    for (const path of ['/api/projects', '/api/communications', '/api/finance', '/api/integrations', '/api/me']) {
-      assert.equal((await app.request(path)).status, 401, `${path} requires sign-in`);
-    }
+    const cpo = await app.signIn('cpo@test.example');
+
+    const denied = await app.request('/api/communications', { cookie: cpo, body: { title: 'Nope' } });
+    assert.equal(denied.status, 403);
+    assert.equal((await app.request('/api/communications', { body: { title: 'Nope' } })).status, 401);
+    assert.equal((await app.request('/api/communications', { cookie: ceo, body: { title: '   ' } })).status, 400);
+
+    const posted = await app.request('/api/communications', { cookie: ceo, body: { title: 'Office closed Friday', body: 'Enjoy the long weekend.' } });
+    assert.equal(posted.status, 201);
+    const seen = await app.request('/api/communications', { cookie: cpo });
+    assert.deepEqual(seen.json.items.map((i) => [i.title, i.body, i.from]), [['Office closed Friday', 'Enjoy the long weekend.', 'Casey CEO']]);
+
+    const id = posted.json.item.id;
+    assert.equal((await app.request('/api/communications/delete', { cookie: cpo, body: { id } })).status, 403);
+    assert.equal((await app.request('/api/communications/delete', { cookie: ceo, body: { id } })).status, 200);
+    const after = await app.request('/api/communications', { cookie: cpo });
+    assert.equal(after.json.message, 'No announcements yet.');
+  } finally { await app.close(); }
+});
+
+test('Privacy: founders\' email addresses and names are not exposed before sign-in or in the admin panel', async () => {
+  const app = await startApp();
+  try {
+    const pub = await app.request('/api/public-config');
+    assert.deepEqual(pub.json.positions.map((p) => p.role), ['CEO', 'CTO', 'CMO', 'CPO', 'ADMIN']);
+    assert.deepEqual(pub.json.demoAccounts, []);
+    assert.ok(!/test\.example|Casey/.test(pub.text));
+    const access = await app.request('/api/access', { cookie: await app.signIn('admin@test.example') });
+    assert.ok(access.json.people.some((p) => p.name === 'Casey CEO' && p.emailCount === 2));
+    assert.ok(!access.text.includes('@test.example'));
   } finally { await app.close(); }
 });
 
@@ -102,6 +215,7 @@ test('Demo mode serves fictional sample data through the same customer pipeline'
   const app = await startApp({ env: { KTOS_DATA_MODE: 'demo' } });
   try {
     const cookie = await app.signIn('ceo@test.example');
+    assert.ok((await app.request('/api/communications', { cookie })).json.items.every((i) => i.sample));
     const { json } = await app.request('/api/customers', { cookie });
     assert.equal(json.status, 'ok');
     assert.equal(json.isSampleData, true);

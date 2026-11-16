@@ -1,0 +1,7 @@
+[
+  { "name": "First Last", "role": "CEO", "emails": ["first@example.com", "first.personal@example.com"] },
+  { "name": "First Last", "role": "CTO", "emails": ["first@example.com"] },
+  { "name": "First Last", "role": "CMO", "emails": ["first@example.com"] },
+  { "name": "First Last", "role": "CPO", "emails": ["first@example.com"] },
+  { "name": "First Last", "role": "ADMIN", "emails": ["first@example.com"] }
+]

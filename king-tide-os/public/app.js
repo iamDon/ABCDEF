@@ -34,8 +34,10 @@ const formatWhen = (iso, fmt = dateTime) => {
 // Date-only values ("2026-12-04") must not shift a day in western time zones.
 const formatDay = (day) => formatWhen(day ? `${day}T12:00:00` : null, dateOnly);
 
-/* ---------- Sign-in ---------- */
+/* ---------- Sign-in: position -> email -> code ---------- */
 
+let publicConfig = { positions: [], demoAccounts: [], adminEmail: '' };
+let chosen = null; // the position picked on the splash page
 let pendingEmail = '';
 
 function showLoginError(message) {
@@ -43,41 +45,53 @@ function showLoginError(message) {
   $('login-error').hidden = !message;
 }
 
-async function requestCode(email) {
+function showStep(step) {
+  $('position-step').hidden = step !== 'position';
+  $('email-form').hidden = step !== 'email';
+  $('code-form').hidden = step !== 'code';
   showLoginError('');
-  const { ok, data } = await api('/api/auth/request-code', { email });
-  if (!ok) return showLoginError('Enter the email address you use for King Tide.');
-  pendingEmail = email;
-  $('email-form').hidden = true;
-  $('code-form').hidden = false;
-  $('code-sent').textContent = data.demoCode
-    ? `Demo mode: your code is ${data.demoCode}. In production it would arrive by email.`
-    : `${data.message} Enter it below.`;
-  $('code').value = data.demoCode || '';
-  $('code').focus();
+}
+
+function choosePosition(position) {
+  chosen = position;
+  $('email-heading').textContent = `Signing in as ${position.label}`;
+  // Demo only: fill in the fictional sample address for this position.
+  $('email').value = publicConfig.demoAccounts.find((a) => a.role === position.role)?.email || '';
+  showStep('email');
+  $('email').focus();
 }
 
 async function showLogin() {
   $('dashboard-view').hidden = true;
   $('login-view').hidden = false;
-  $('email-form').hidden = false;
-  $('code-form').hidden = true;
-  showLoginError('');
+  showStep('position');
   const { data } = await api('/api/public-config');
-  const accounts = data?.demoAccounts || [];
-  $('demo-accounts').hidden = accounts.length === 0;
-  $('demo-account-list').replaceChildren(...accounts.map((a) => {
-    const chip = el('button', { type: 'button', class: 'chip', text: a.role === 'FOUNDER' ? 'Founder' : a.role });
-    chip.addEventListener('click', () => { $('email').value = a.email; requestCode(a.email); });
-    return chip;
+  if (data) publicConfig = data;
+  for (const link of document.querySelectorAll('.contact-admin')) link.href = `mailto:${publicConfig.adminEmail}`;
+  $('position-list').replaceChildren(...publicConfig.positions.map((p) => {
+    const button = el('button', { type: 'button', class: 'position' },
+      el('span', { class: 'position-label', text: p.label }),
+      el('span', { class: 'position-title', text: p.title === p.label ? 'Site administrator' : p.title }),
+      el('span', { class: 'arrow', 'aria-hidden': 'true', text: '→' }));
+    button.addEventListener('click', () => choosePosition(p));
+    return button;
   }));
 }
 
-$('email-form').addEventListener('submit', (e) => {
+$('email-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = $('email').value.trim();
-  if (!email) return showLoginError('Enter your work email.');
-  requestCode(email);
+  if (!email) return showLoginError('Enter your email address.');
+  showLoginError('');
+  const { ok, data } = await api('/api/auth/request-code', { email, role: chosen.role });
+  if (!ok) return showLoginError(data?.message || 'Something went wrong. Please try again.');
+  pendingEmail = email;
+  showStep('code');
+  $('code-sent').textContent = data.demoCode
+    ? `Demo mode: your code is ${data.demoCode}. Normally it arrives by email.`
+    : `${data.message} Check ${email}.`;
+  $('code').value = data.demoCode || '';
+  $('code').focus();
 });
 
 $('code-form').addEventListener('submit', async (e) => {
@@ -88,7 +102,8 @@ $('code-form').addEventListener('submit', async (e) => {
   showDashboard(data.user);
 });
 
-$('code-back').addEventListener('click', showLogin);
+$('email-back').addEventListener('click', () => showStep('position'));
+$('code-back').addEventListener('click', () => showStep('position'));
 
 $('sign-out').addEventListener('click', async () => {
   await api('/api/auth/logout', {});
@@ -121,6 +136,7 @@ async function loadSection(name, render) {
     const { status, data } = await api(`/api/${name}`);
     if (status === 401) return showLogin();
     if (data?.status === 'ok' || (name === 'integrations' && data?.integrations)) return render(data, body);
+    if (status === 403) return body.replaceChildren(notice('Your position does not include this section.'));
     body.replaceChildren(notice(data?.message || 'This section is temporarily unavailable. Please try again later.',
       data?.status === 'not_connected' ? 'info' : 'warn'));
     return render(null, null, data);
@@ -132,25 +148,25 @@ async function loadSection(name, render) {
 
 function renderCustomers(data, body, failure) {
   if (!data) {
-    setTile('customers', 'Customers', '—');
+    setTile('customers', 'Clients', '—');
     const last = failure?.lastSuccessfulRefresh;
     $('customers-meta').textContent = last ? `Last successful update: ${formatWhen(last)}` : '';
     return;
   }
-  setTile('customers', 'Customers', String(data.totalCustomers));
+  setTile('customers', 'Clients', String(data.totalCustomers));
   $('customers-meta').replaceChildren(
     document.createTextNode(`From ${data.sourceSystem} · Last refreshed ${formatWhen(data.lastSuccessfulRefresh)} `),
     sampleBadge(data) || '');
 
   if (data.totalCustomers === 0) return body.replaceChildren(notice(data.message));
 
-  const stages = el('ol', { class: 'tideline', 'aria-label': 'Customers by pipeline stage' },
+  const stages = el('ol', { class: 'tideline', 'aria-label': 'Clients by pipeline stage' },
     ...data.stages.map((s) => el('li', { class: `tideline-stage${s.count ? '' : ' is-empty'}` },
       el('span', { class: 'tideline-label', text: s.stage }),
       el('span', { class: 'tideline-count', text: String(s.count) }))));
 
   const rows = data.customers.map((c) => el('tr', {},
-    el('td', { 'data-label': 'Customer', class: 'cell-name' },
+    el('td', { 'data-label': 'Client', class: 'cell-name' },
       c.sourceRecordUrl
         ? el('a', { href: c.sourceRecordUrl, target: '_blank', rel: 'noopener noreferrer', text: c.customerName, title: `Open in ${c.sourceSystem}` })
         : document.createTextNode(c.customerName)),
@@ -160,7 +176,7 @@ function renderCustomers(data, body, failure) {
 
   const table = el('table', { class: 'table' },
     el('thead', {}, el('tr', {},
-      ...['Customer', 'Stage', 'Account manager', 'Last updated'].map((h) => el('th', { scope: 'col', text: h })))),
+      ...['Client', 'Stage', 'Account manager', 'Last updated'].map((h) => el('th', { scope: 'col', text: h })))),
     el('tbody', {}, ...rows));
 
   body.replaceChildren(stages, table);
@@ -177,13 +193,76 @@ function renderProjects(data, body) {
     el('span', { class: `badge badge--status${p.status === 'At risk' ? ' is-risk' : ''}`, text: p.status })))));
 }
 
+const canPost = () => currentUser?.permissions.includes('announcements:post');
+
 function renderCommunications(data, body) {
   if (!data) return setMeta('communications-meta', null, '');
   setMeta('communications-meta', data);
-  body.replaceChildren(el('ul', { class: 'list' }, ...data.items.map((m) => el('li', { class: 'list-item' },
+  if (data.items.length === 0) return body.replaceChildren(notice(data.message));
+  body.replaceChildren(el('ul', { class: 'list' }, ...data.items.map((m) => {
+    let remove = null;
+    if (canPost() && !m.sample) {
+      remove = el('button', { type: 'button', class: 'btn btn--small', text: 'Remove', 'aria-label': `Remove announcement: ${m.title}` });
+      remove.addEventListener('click', async () => {
+        remove.disabled = true;
+        await api('/api/communications/delete', { id: m.id });
+        load('communications');
+      });
+    }
+    return el('li', { class: 'list-item' },
+      el('div', { class: 'list-main' },
+        el('span', { class: 'list-title', text: m.title }),
+        m.body ? el('span', { class: 'list-body', text: m.body }) : null,
+        el('span', { class: 'muted', text: `${m.from} · ${formatWhen(m.when)}` })),
+      remove);
+  })));
+}
+
+$('announce-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const error = $('announce-error');
+  error.hidden = true;
+  const { ok, data } = await api('/api/communications', { title: $('announce-title').value, body: $('announce-body').value });
+  if (!ok) {
+    error.textContent = data?.message || 'The announcement could not be posted. Please try again.';
+    error.hidden = false;
+    return;
+  }
+  $('announce-form').reset();
+  load('communications');
+});
+
+function renderCalendar(data, body) {
+  if (!data) return setMeta('calendar-meta', null, '');
+  setMeta('calendar-meta', data);
+  body.replaceChildren(el('ul', { class: 'list' }, ...data.events.map((ev) => el('li', { class: 'list-item' },
     el('div', { class: 'list-main' },
-      el('span', { class: 'list-title', text: m.title }),
-      el('span', { class: 'muted', text: `${m.from} · ${formatWhen(m.when)}` }))))));
+      el('span', { class: 'list-title', text: ev.title }),
+      el('span', { class: 'muted', text: `${formatWhen(ev.when)} · ${ev.where}` }))))));
+}
+
+function renderLinks() {
+  $('links-body').replaceChildren(...currentUser.links.map((link) =>
+    el('a', { class: 'btn btn--primary', href: link.url, target: '_blank', rel: 'noopener noreferrer', title: link.description },
+      el('span', { text: link.label }), el('span', { class: 'arrow', 'aria-hidden': 'true', text: '↗' }))));
+}
+
+const SECTION_LABELS = {
+  customers: 'Clients', projects: 'Projects', communications: 'Announcements', finance: 'Finance',
+  calendar: 'Calendar', links: 'Shortcuts', integrations: 'Connections', access: 'Access',
+};
+
+function renderAccess(data, body) {
+  if (!data) return;
+  body.replaceChildren(el('ul', { class: 'list' }, ...data.roles.map((r) => {
+    const people = data.people.filter((p) => p.role === r.role).map((p) => p.name).join(', ') || 'Nobody assigned';
+    const sees = r.sections.map((s, i) => `${i + 1}. ${SECTION_LABELS[s] || s}`).join('   ');
+    return el('li', { class: 'list-item' },
+      el('div', { class: 'list-main' },
+        el('span', { class: 'list-title', text: `${r.title} — ${people}` }),
+        el('span', { class: 'muted', text: sees })),
+      r.canPostAnnouncements ? el('span', { class: 'badge', text: 'Can post announcements' }) : null);
+  })));
 }
 
 function renderFinance(data, body) {
@@ -204,23 +283,48 @@ function renderIntegrations(data, body) {
     el('span', { class: `badge badge--state is-${i.state}`, text: STATE_LABELS[i.state] || i.state })))));
 }
 
-const SECTIONS = [
-  { name: 'customers', permission: 'customers:view', render: renderCustomers },
-  { name: 'projects', permission: 'projects:view', render: renderProjects },
-  { name: 'communications', permission: 'communications:view', render: renderCommunications },
-  { name: 'finance', permission: 'finance:view', render: renderFinance },
-  { name: 'integrations', permission: 'integrations:view', render: renderIntegrations },
-];
+const RENDERERS = {
+  customers: renderCustomers,
+  projects: renderProjects,
+  communications: renderCommunications,
+  finance: renderFinance,
+  calendar: renderCalendar,
+  integrations: renderIntegrations,
+  access: renderAccess,
+};
 
 let currentUser = null;
-const allowed = (name) => currentUser?.permissions.includes(SECTIONS.find((s) => s.name === name).permission);
-const load = (name) => loadSection(name, SECTIONS.find((s) => s.name === name).render);
+const allowed = (name) => Boolean(currentUser?.sections.includes(name));
+const load = (name) => loadSection(name, RENDERERS[name]);
 
 async function refreshCustomers() {
   $('customers-refresh').disabled = true;
   await load('customers');
   if (allowed('integrations')) await load('integrations'); // reflects the refresh just made
   $('customers-refresh').disabled = false;
+}
+
+// Puts this founder's sections on the page in their order. The first section
+// and the client table get the full width; a half-width card left alone on a
+// row is widened so there are no gaps.
+function layoutSections(sections) {
+  const grid = document.querySelector('main.grid');
+  for (const card of grid.querySelectorAll('section.card')) card.hidden = true;
+  let openHalf = null;
+  sections.forEach((name, index) => {
+    const card = $(name);
+    card.hidden = false;
+    grid.append(card);
+    const wide = index === 0 || name === 'customers';
+    card.classList.toggle('card--wide', wide);
+    if (wide) {
+      openHalf?.classList.add('card--wide');
+      openHalf = null;
+    } else {
+      openHalf = openHalf ? null : card;
+    }
+  });
+  openHalf?.classList.add('card--wide');
 }
 
 function showDashboard(user) {
@@ -232,19 +336,22 @@ function showDashboard(user) {
   const partOfDay = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
   $('greeting').textContent = `${partOfDay}, ${user.name.split(' ')[0]}.`;
   $('today').textContent = new Intl.DateTimeFormat(undefined, { dateStyle: 'full' }).format(new Date());
-  $('user-chip').textContent = `${user.name} · ${user.role}`;
+  $('user-chip').textContent = `${user.name} · ${user.roleLabel}`;
   $('sample-banner').hidden = user.dataMode !== 'demo';
+  $('announce-form').hidden = !canPost();
+  for (const link of document.querySelectorAll('.contact-admin')) if (publicConfig.adminEmail) link.href = `mailto:${publicConfig.adminEmail}`;
 
   tiles.clear();
   $('tiles').replaceChildren();
-  if (allowed('customers')) setTile('customers', 'Customers', '…');
+  if (allowed('customers')) setTile('customers', 'Clients', '…');
   if (allowed('projects')) setTile('projects', 'Active projects', '…');
-  // Only sections this role may see are shown or requested; the server
+
+  // Only sections this position may see are shown or requested; the server
   // enforces the same rule on every request.
-  for (const s of SECTIONS) $(s.name).hidden = !allowed(s.name);
-  for (const s of SECTIONS) {
-    if (s.name === 'customers' || s.name === 'integrations' || !allowed(s.name)) continue;
-    load(s.name);
+  layoutSections(user.sections);
+  for (const name of user.sections) {
+    if (name === 'links') renderLinks();
+    else if (name !== 'customers' && name !== 'integrations') load(name);
   }
   if (allowed('customers')) refreshCustomers();
   else if (allowed('integrations')) load('integrations');
@@ -253,5 +360,9 @@ function showDashboard(user) {
 $('customers-refresh').addEventListener('click', refreshCustomers);
 
 const me = await api('/api/me');
-if (me.ok) showDashboard(me.data.user);
-else showLogin();
+if (me.ok) {
+  api('/api/public-config').then(({ data }) => { if (data) publicConfig = data; });
+  showDashboard(me.data.user);
+} else {
+  showLogin();
+}

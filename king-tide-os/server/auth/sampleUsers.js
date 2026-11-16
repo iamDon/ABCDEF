@@ -1,8 +1,9 @@
 // Fictional founders for the demo environment. Not real people or addresses.
+// Used only when no real founders are configured (see config/users.example.json).
 export const SAMPLE_USERS = [
-  { email: 'ceo@kingtide.example', name: 'Marina Ellis', role: 'CEO' },
-  { email: 'cto@kingtide.example', name: 'Cole Banks', role: 'CTO' },
-  { email: 'cmo@kingtide.example', name: 'Sandy Shoals', role: 'CMO' },
-  { email: 'cpo@kingtide.example', name: 'Reed Marsh', role: 'CPO' },
-  { email: 'founder@kingtide.example', name: 'Wren Calloway', role: 'FOUNDER' },
+  { name: 'Marina Ellis', role: 'CEO', emails: ['ceo@kingtide.example'] },
+  { name: 'Cole Banks', role: 'CTO', emails: ['cto@kingtide.example'] },
+  { name: 'Sandy Shoals', role: 'CMO', emails: ['cmo@kingtide.example'] },
+  { name: 'Reed Marsh', role: 'CPO', emails: ['cpo@kingtide.example'] },
+  { name: 'Wren Calloway', role: 'ADMIN', emails: ['admin@kingtide.example'] },
 ];

@@ -4,9 +4,14 @@
   "private": true,
   "description": "King Tide OS — one login, one dashboard, one business snapshot.",
   "type": "module",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "start": "node server/index.js",
     "test": "node --test \"test/*.test.js\""
+  },
+  "dependencies": {
+    "nodemailer": "^6.10.1"
   }
 }

@@ -1,2 +1,5 @@
 .env
 node_modules/
+# Real founders' email addresses and posted announcements stay off GitHub.
+config/users.json
+data/

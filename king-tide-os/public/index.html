@@ -18,33 +18,40 @@
         </div>
         <p class="eyebrow">King Tide OS</p>
         <h1>One login. One dashboard. <em>One business snapshot.</em></h1>
-        <p class="lede">See where customers, projects and the business stand without opening five different tools.</p>
+        <p class="lede">See where clients, projects and the business stand without opening five different tools.</p>
       </div>
 
       <div class="login-panel">
-        <form id="email-form" novalidate>
-          <label for="email">Work email</label>
+        <div id="position-step">
+          <p class="eyebrow">Step 1 of 3</p>
+          <h2>Choose your position</h2>
+          <div id="position-list" class="position-list"></div>
+        </div>
+
+        <form id="email-form" hidden novalidate>
+          <p class="eyebrow">Step 2 of 3</p>
+          <h2 id="email-heading">Enter your email</h2>
+          <label for="email">Your email address</label>
           <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required placeholder="you@kingtideconcepts.com">
           <button type="submit" class="btn btn--primary"><span>Email me a sign-in code</span><span class="arrow" aria-hidden="true">↗</span></button>
-          <p class="fineprint">No password required. Codes work once and expire after 10 minutes.</p>
+          <p class="fineprint">No password needed. The code works once and expires after 10 minutes.</p>
+          <button type="button" id="email-back" class="btn btn--link">Choose a different position</button>
         </form>
 
         <form id="code-form" hidden novalidate>
+          <p class="eyebrow">Step 3 of 3</p>
+          <h2>Enter your code</h2>
           <p id="code-sent" class="note"></p>
           <label for="code">6-digit code</label>
           <input id="code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" required>
           <button type="submit" class="btn btn--primary"><span>Sign in</span><span class="arrow" aria-hidden="true">↗</span></button>
-          <button type="button" id="code-back" class="btn btn--link">Use a different email</button>
+          <button type="button" id="code-back" class="btn btn--link">Start over</button>
         </form>
 
         <p id="login-error" class="form-error" role="alert" hidden></p>
-
-        <div id="demo-accounts" class="demo-accounts" hidden>
-          <p class="eyebrow">Demo — sign in as a sample founder</p>
-          <div id="demo-account-list" class="chip-row"></div>
-        </div>
       </div>
     </div>
+    <p class="contact-row"><span>Trouble signing in?</span> <a class="btn btn--outline contact-admin" href="mailto:admin@kingtideconcepts.com"><span>Contact the admin</span><span class="arrow" aria-hidden="true">✉</span></a></p>
     <svg class="shore" viewBox="0 0 1440 150" preserveAspectRatio="none" aria-hidden="true">
       <path class="shore-sand" d="M0 22c240 46 480 62 760 44s480-40 680-52v136H0z"/>
       <path class="shore-line" d="M0 22c240 46 480 62 760 44s480-40 680-52"/>
@@ -88,7 +95,7 @@
       <section id="customers" class="card card--wide" aria-labelledby="customers-title" hidden>
         <div class="card-head">
           <div>
-            <p class="eyebrow card-num">Customers</p>
+            <p class="eyebrow card-num">Clients</p>
             <h2 id="customers-title">Who we’re working with</h2>
             <p id="customers-meta" class="meta"></p>
           </div>
@@ -104,6 +111,13 @@
 
       <section id="communications" class="card" aria-labelledby="communications-title" hidden>
         <div class="card-head"><div><p class="eyebrow card-num">Announcements</p><h2 id="communications-title">What the team should know</h2><p id="communications-meta" class="meta"></p></div></div>
+        <form id="announce-form" class="announce-form" hidden novalidate>
+          <label for="announce-title">New announcement</label>
+          <input id="announce-title" type="text" maxlength="140" placeholder="What should the team know?" required>
+          <textarea id="announce-body" rows="2" maxlength="1000" placeholder="Details (optional)" aria-label="Details (optional)"></textarea>
+          <button type="submit" class="btn btn--primary"><span>Post announcement</span><span class="arrow" aria-hidden="true">↗</span></button>
+          <p id="announce-error" class="form-error" role="alert" hidden></p>
+        </form>
         <div id="communications-body" class="card-body"></div>
       </section>
 
@@ -112,16 +126,33 @@
         <div id="finance-body" class="card-body"></div>
       </section>
 
+      <section id="calendar" class="card" aria-labelledby="calendar-title" hidden>
+        <div class="card-head"><div><p class="eyebrow card-num">Calendar</p><h2 id="calendar-title">What’s coming up</h2><p id="calendar-meta" class="meta"></p></div></div>
+        <div id="calendar-body" class="card-body"></div>
+      </section>
+
+      <section id="links" class="card" aria-labelledby="links-title" hidden>
+        <div class="card-head"><div><p class="eyebrow card-num">Shortcuts</p><h2 id="links-title">Jump to a tool</h2><p class="meta">Opens in a new tab</p></div></div>
+        <div id="links-body" class="card-body"></div>
+      </section>
+
       <section id="integrations" class="card" aria-labelledby="integrations-title" hidden>
         <div class="card-head"><div><p class="eyebrow card-num">Connections</p><h2 id="integrations-title">Are our tools answering?</h2><p class="meta">The systems King Tide OS reads from</p></div></div>
         <div id="integrations-body" class="card-body"></div>
+      </section>
+      <section id="access" class="card" aria-labelledby="access-title" hidden>
+        <div class="card-head"><div><p class="eyebrow card-num">Access</p><h2 id="access-title">Who sees what</h2><p class="meta">Each position’s dashboard, in the order shown to them</p></div></div>
+        <div id="access-body" class="card-body"></div>
       </section>
     </main>
 
     <footer class="footer">
       <div class="wrap footer-inner">
         <p class="footer-note">King Tide OS shows information from the tools you already use. To change a record, open it in the tool it came from.</p>
-        <p class="footer-tag"><span>KTC</span> | Built for momentum.</p>
+        <div class="footer-side">
+          <a class="btn btn--light contact-admin" href="mailto:admin@kingtideconcepts.com"><span>Contact the admin</span><span class="arrow" aria-hidden="true">✉</span></a>
+          <p class="footer-tag"><span>KTC</span> | Built for momentum.</p>
+        </div>
       </div>
     </footer>
   </div>

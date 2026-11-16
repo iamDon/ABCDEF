@@ -1,4 +1,4 @@
-// Projects, communications and finance are not integrated yet. In demo mode
+// Projects, finance and the calendar are not integrated yet. In demo mode
 // they return clearly-labelled fictional data so the dashboard can be shown
 // end to end; in live mode they say plainly that they are not connected.
 const notConnected = (system) => ({
@@ -18,14 +18,14 @@ const SAMPLE = {
       { name: 'Currituck Outfitters — IT Refresh', owner: 'Wren Calloway', status: 'Not started', nextMilestone: 'Kickoff call', due: '2026-12-01' },
     ],
   },
-  communications: {
+  calendar: {
     status: 'ok',
     isSampleData: true,
-    sourceSystem: 'King Tide OS',
-    items: [
-      { title: 'Founders sync moved to Thursday 9:00', from: 'Marina Ellis', when: '2026-11-16T08:30:00-05:00' },
-      { title: 'Roanoke Roasters asked for a revised timeline', from: 'Reed Marsh', when: '2026-11-15T16:10:00-05:00' },
-      { title: 'New inbound lead from the Wilmington chamber mixer', from: 'Sandy Shoals', when: '2026-11-14T12:45:00-05:00' },
+    sourceSystem: 'Google Calendar',
+    events: [
+      { title: 'Founders sync', when: '2026-11-19T09:00:00-05:00', where: 'Video call' },
+      { title: 'Cape Fear Dental — staff onboarding session', when: '2026-11-24T13:00:00-05:00', where: 'On site, Wilmington' },
+      { title: 'Quarterly planning', when: '2026-12-02T10:00:00-05:00', where: 'Office' },
     ],
   },
   finance: {
@@ -40,7 +40,7 @@ const SAMPLE = {
   },
 };
 
-const SYSTEMS = { projects: 'Zoho Projects', communications: 'Communications', finance: 'Finance' };
+const SYSTEMS = { projects: 'Zoho Projects', calendar: 'The shared calendar', finance: 'Finance' };
 
 export function createPlaceholderModules({ dataMode }) {
   return {

@@ -88,7 +88,7 @@ test('TC-03 empty data shows "No customers currently available."', async () => {
 test('TC-04 Bigin outage: customers unavailable, other modules still work, nothing sensitive shown', async () => {
   const app = await startApp({ zoho: fakeZoho({ networkDown: true }) });
   try {
-    const cookie = await app.signIn('ceo@test.example');
+    const cookie = await app.signIn('admin@test.example');
     const customers = await app.request('/api/customers', { cookie });
     assert.equal(customers.status, 503);
     assert.equal(customers.json.status, 'unavailable');
@@ -97,7 +97,7 @@ test('TC-04 Bigin outage: customers unavailable, other modules still work, nothi
     assertNoSecrets(customers.text);
     assert.ok(!/zoho|fetch failed|stack/i.test(customers.text), 'no raw error details');
 
-    for (const path of ['/api/me', '/api/projects', '/api/communications', '/api/finance', '/api/integrations', '/']) {
+    for (const path of ['/api/me', '/api/projects', '/api/communications', '/api/finance', '/api/calendar', '/api/integrations', '/']) {
       assert.equal((await app.request(path, { cookie })).status, 200, `${path} still works`);
     }
     const { json } = await app.request('/api/integrations', { cookie });

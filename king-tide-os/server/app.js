@@ -4,7 +4,7 @@
 import { readFile } from 'node:fs/promises';
 import { extname, join, normalize, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { PERMISSIONS, can, permissionsFor } from './auth/roles.js';
+import { PERMISSIONS, can, describeAccess, listPositions, viewFor } from './auth/roles.js';
 
 const PUBLIC_DIR = fileURLToPath(new URL('../public', import.meta.url));
 const COOKIE = 'ktos_session';
@@ -21,7 +21,7 @@ const SECURITY_HEADERS = {
   'Referrer-Policy': 'no-referrer',
 };
 
-export function createApp({ config, auth, customerLogic, modules, health }) {
+export function createApp({ config, auth, customerLogic, modules, announcements, health, log = console.error }) {
   const cookieFlags = `HttpOnly; SameSite=Lax; Path=/${config.secureCookies ? '; Secure' : ''}`;
 
   const send = (res, status, body, headers = {}) => {
@@ -57,26 +57,36 @@ export function createApp({ config, auth, customerLogic, modules, health }) {
     name: user.name,
     email: user.email,
     role: user.role,
-    permissions: permissionsFor(user.role),
+    ...viewFor(user.role), // roleLabel, sections (in order), links, permissions
     dataMode: config.dataMode,
   });
 
   const routes = {
-    // Public: lets the sign-in page offer the fictional demo accounts.
+    // Public: what the sign-in page needs. Position titles only — no names
+    // or real email addresses. Sample addresses are fictional.
     'GET /api/public-config': async (req, res) => {
-      const demo = config.dataMode === 'demo' && config.showLoginCodes;
       send(res, 200, {
         dataMode: config.dataMode,
-        demoAccounts: demo ? config.users.map((u) => ({ email: u.email, role: u.role })) : [],
+        adminEmail: config.adminEmail,
+        positions: listPositions(),
+        demoAccounts: config.usingSampleUsers && config.showLoginCodes
+          ? config.users.map((u) => ({ role: u.role, email: u.emails[0] }))
+          : [],
       });
     },
 
     'POST /api/auth/request-code': async (req, res) => {
       const body = await readJson(req);
       if (!body) return send(res, 400, { error: 'bad_request' });
-      const code = await auth.requestCode(body.email);
-      // Same answer whether or not the email is approved.
-      const reply = { message: 'If that email is approved, a sign-in code is on its way.' };
+      let code;
+      try {
+        code = await auth.requestCode(body.email, body.role);
+      } catch (err) {
+        log(`[auth] Could not deliver a sign-in code: ${err?.code || err?.name || 'error'}`);
+        return send(res, 503, { error: 'email_unavailable', message: 'We could not send your code right now. Please try again, or contact the admin.' });
+      }
+      // Same answer whether or not the email is approved for that position.
+      const reply = { message: 'If that email matches the position you chose, a sign-in code is on its way.' };
       if (config.showLoginCodes && code) reply.demoCode = code;
       send(res, 200, reply);
     },
@@ -111,7 +121,30 @@ export function createApp({ config, auth, customerLogic, modules, health }) {
     },
 
     'GET /api/communications': async (req, res) => {
-      if (authorize(req, res, PERMISSIONS.communications)) send(res, 200, modules.get('communications'));
+      if (authorize(req, res, PERMISSIONS.communications)) send(res, 200, announcements.list());
+    },
+
+    'POST /api/communications': async (req, res) => {
+      const user = authorize(req, res, PERMISSIONS.postAnnouncements);
+      if (!user) return;
+      const item = announcements.post((await readJson(req)) || {}, user);
+      if (!item) return send(res, 400, { error: 'bad_request', message: 'An announcement needs a title.' });
+      send(res, 201, { item });
+    },
+
+    'POST /api/communications/delete': async (req, res) => {
+      if (!authorize(req, res, PERMISSIONS.postAnnouncements)) return;
+      const body = await readJson(req);
+      send(res, announcements.remove(body?.id) ? 200 : 404, { ok: true });
+    },
+
+    'GET /api/calendar': async (req, res) => {
+      if (authorize(req, res, PERMISSIONS.calendar)) send(res, 200, modules.get('calendar'));
+    },
+
+    // Admin only: who can sign in and what each position sees. No email addresses.
+    'GET /api/access': async (req, res) => {
+      if (authorize(req, res, PERMISSIONS.access)) send(res, 200, { status: 'ok', roles: describeAccess(), people: auth.listPeople() });
     },
 
     'GET /api/finance': async (req, res) => {

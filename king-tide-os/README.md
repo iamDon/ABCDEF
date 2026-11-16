@@ -79,6 +79,13 @@ The Customer model the dashboard uses:
 The tests run the real server against a fake Zoho, so they need no credentials.
 To show failure isolation by hand, start with `KTOS_SIMULATE_BIGIN_OUTAGE=true`.
 
+## Look and feel
+
+Styled after kingtideconcepts.com (cream, navy, tide teal, gold; Cormorant
+Garamond headlines, Manrope text — both bundled in `public/fonts/`, no external
+requests). `public/logo.svg` is a hand-traced copy of the company logo; replace
+it and `public/favicon.svg` with the official artwork when convenient.
+
 ## Not done yet
 
 - **Verified against a real Bigin account.** The Zoho client follows the Bigin v2

@@ -10,110 +10,120 @@
 <body>
   <!-- Sign-in -->
   <main id="login-view" class="login" hidden>
-    <div class="login-card">
-      <div class="brand brand--stacked">
-        <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
-          <circle cx="24" cy="24" r="23" class="mark-disc"/>
-          <path d="M13 21l4-9 7 7 7-7 4 9z" class="mark-crown"/>
-          <path d="M8 29c4-4 8-4 12 0s8 4 12 0 6-3 8-1" class="mark-wave"/>
-          <path d="M10 36c4-4 8-4 12 0s8 4 12 0 4-2 5-1.5" class="mark-wave mark-wave--soft"/>
-        </svg>
-        <h1>King Tide OS</h1>
-        <p class="tagline">One login. One dashboard. One business snapshot.</p>
+    <div class="login-inner">
+      <div class="login-copy">
+        <div class="brand">
+          <img class="brand-mark" src="/logo.svg" alt="" width="44" height="44">
+          <span class="brand-text"><span class="brand-name">King Tide</span><span class="brand-sub">Concepts <b>OS</b></span></span>
+        </div>
+        <p class="eyebrow">King Tide OS</p>
+        <h1>One login. One dashboard. <em>One business snapshot.</em></h1>
+        <p class="lede">See where customers, projects and the business stand without opening five different tools.</p>
       </div>
 
-      <form id="email-form" novalidate>
-        <label for="email">Work email</label>
-        <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required placeholder="you@company.com">
-        <button type="submit" class="btn btn--primary">Email me a sign-in code</button>
-      </form>
+      <div class="login-panel">
+        <form id="email-form" novalidate>
+          <label for="email">Work email</label>
+          <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required placeholder="you@kingtideconcepts.com">
+          <button type="submit" class="btn btn--primary"><span>Email me a sign-in code</span><span class="arrow" aria-hidden="true">↗</span></button>
+          <p class="fineprint">No password required. Codes work once and expire after 10 minutes.</p>
+        </form>
 
-      <form id="code-form" hidden novalidate>
-        <p id="code-sent" class="note"></p>
-        <label for="code">6-digit code</label>
-        <input id="code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" required>
-        <button type="submit" class="btn btn--primary">Sign in</button>
-        <button type="button" id="code-back" class="btn btn--quiet">Use a different email</button>
-      </form>
+        <form id="code-form" hidden novalidate>
+          <p id="code-sent" class="note"></p>
+          <label for="code">6-digit code</label>
+          <input id="code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" required>
+          <button type="submit" class="btn btn--primary"><span>Sign in</span><span class="arrow" aria-hidden="true">↗</span></button>
+          <button type="button" id="code-back" class="btn btn--link">Use a different email</button>
+        </form>
 
-      <p id="login-error" class="form-error" role="alert" hidden></p>
+        <p id="login-error" class="form-error" role="alert" hidden></p>
 
-      <div id="demo-accounts" class="demo-accounts" hidden>
-        <p>Demo mode — sign in as a sample founder:</p>
-        <div id="demo-account-list" class="chip-row"></div>
+        <div id="demo-accounts" class="demo-accounts" hidden>
+          <p class="eyebrow">Demo — sign in as a sample founder</p>
+          <div id="demo-account-list" class="chip-row"></div>
+        </div>
       </div>
     </div>
-    <svg class="login-waves" viewBox="0 0 1440 220" preserveAspectRatio="none" aria-hidden="true">
-      <path class="wave wave--back" d="M0 90c180-50 360-50 540 0s360 50 540 0 240-40 360-20v150H0z"/>
-      <path class="wave wave--mid" d="M0 130c200-45 400-45 600 0s400 45 600 0 160-25 240-15v105H0z"/>
-      <path class="wave wave--front" d="M0 170c160-30 320-30 480 0s320 30 480 0 320-30 480 0v50H0z"/>
+    <svg class="shore" viewBox="0 0 1440 150" preserveAspectRatio="none" aria-hidden="true">
+      <path class="shore-sand" d="M0 22c240 46 480 62 760 44s480-40 680-52v136H0z"/>
+      <path class="shore-line" d="M0 22c240 46 480 62 760 44s480-40 680-52"/>
+      <path class="shore-foam" d="M0 70c260 40 520 30 780 22s460 2 660-20v78H0z"/>
+      <path class="shore-water" d="M0 104c300 14 560-10 820-12s420 16 620 4v54H0z"/>
+      <path class="shore-deep" d="M0 128c320-12 620-6 900-2s380 14 540-10v34H0z"/>
     </svg>
   </main>
 
   <!-- Dashboard -->
   <div id="dashboard-view" hidden>
-    <header class="masthead">
-      <div class="masthead-bar">
-        <div class="brand">
-          <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
-            <circle cx="24" cy="24" r="23" class="mark-disc"/>
-            <path d="M13 21l4-9 7 7 7-7 4 9z" class="mark-crown"/>
-            <path d="M8 29c4-4 8-4 12 0s8 4 12 0 6-3 8-1" class="mark-wave"/>
-            <path d="M10 36c4-4 8-4 12 0s8 4 12 0 4-2 5-1.5" class="mark-wave mark-wave--soft"/>
-          </svg>
-          <span class="brand-name">King Tide OS</span>
-        </div>
-        <div class="account">
-          <span id="user-chip" class="user-chip"></span>
-          <button id="sign-out" type="button" class="btn btn--ghost">Sign out</button>
-        </div>
+    <header class="topbar wrap">
+      <div class="brand">
+        <img class="brand-mark" src="/logo.svg" alt="" width="44" height="44">
+        <span class="brand-text"><span class="brand-name">King Tide</span><span class="brand-sub">Concepts <b>OS</b></span></span>
       </div>
-      <div class="masthead-body">
-        <p id="today" class="eyebrow"></p>
-        <h1 id="greeting"></h1>
-        <p id="sample-banner" class="sample-banner" hidden>Demo environment — every name and number shown is fictional sample data.</p>
-        <div id="tiles" class="tiles" aria-label="Business snapshot"></div>
+      <div class="account">
+        <span id="user-chip" class="user-chip"></span>
+        <button id="sign-out" type="button" class="btn btn--outline"><span>Sign out</span><span class="arrow" aria-hidden="true">↗</span></button>
       </div>
-      <svg class="masthead-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true">
-        <path class="wave wave--mid" d="M0 22c180-22 360-22 540 0s360 22 540 0 240-18 360-8v46H0z"/>
-        <path class="wave wave--page" d="M0 38c200-20 400-20 600 0s400 20 600 0 160-12 240-6v28H0z"/>
-      </svg>
     </header>
 
-    <main class="grid">
+    <section class="hero wrap" aria-label="Business snapshot">
+      <div class="hero-copy">
+        <p id="today" class="eyebrow"></p>
+        <h1><span id="greeting"></span> <em>Here’s where things stand.</em></h1>
+        <p id="sample-banner" class="lede" hidden>Demo environment. Every name and number shown is fictional sample data.</p>
+      </div>
+      <div id="tiles" class="tiles"></div>
+    </section>
+
+    <svg class="shore shore--band" viewBox="0 0 1440 150" preserveAspectRatio="none" aria-hidden="true">
+      <path class="shore-sand" d="M0 22c240 46 480 62 760 44s480-40 680-52v136H0z"/>
+      <path class="shore-line" d="M0 22c240 46 480 62 760 44s480-40 680-52"/>
+      <path class="shore-foam" d="M0 70c260 40 520 30 780 22s460 2 660-20v78H0z"/>
+      <path class="shore-water" d="M0 104c300 14 560-10 820-12s420 16 620 4v54H0z"/>
+      <path class="shore-page" d="M0 132c320-12 620-6 900-2s380 14 540-10v30H0z"/>
+    </svg>
+
+    <main class="grid wrap">
       <section id="customers" class="card card--wide" aria-labelledby="customers-title" hidden>
         <div class="card-head">
           <div>
-            <h2 id="customers-title">Customers</h2>
+            <p class="eyebrow card-num">Customers</p>
+            <h2 id="customers-title">Who we’re working with</h2>
             <p id="customers-meta" class="meta"></p>
           </div>
-          <button id="customers-refresh" type="button" class="btn btn--outline">Refresh</button>
+          <button id="customers-refresh" type="button" class="btn btn--outline"><span>Refresh</span><span class="arrow" aria-hidden="true">↻</span></button>
         </div>
         <div id="customers-body" class="card-body" aria-live="polite"></div>
       </section>
 
       <section id="projects" class="card" aria-labelledby="projects-title" hidden>
-        <div class="card-head"><div><h2 id="projects-title">Projects</h2><p id="projects-meta" class="meta"></p></div></div>
+        <div class="card-head"><div><p class="eyebrow card-num">Projects</p><h2 id="projects-title">What’s in motion</h2><p id="projects-meta" class="meta"></p></div></div>
         <div id="projects-body" class="card-body"></div>
       </section>
 
       <section id="communications" class="card" aria-labelledby="communications-title" hidden>
-        <div class="card-head"><div><h2 id="communications-title">Announcements</h2><p id="communications-meta" class="meta"></p></div></div>
+        <div class="card-head"><div><p class="eyebrow card-num">Announcements</p><h2 id="communications-title">What the team should know</h2><p id="communications-meta" class="meta"></p></div></div>
         <div id="communications-body" class="card-body"></div>
       </section>
 
       <section id="finance" class="card" aria-labelledby="finance-title" hidden>
-        <div class="card-head"><div><h2 id="finance-title">Finance snapshot</h2><p id="finance-meta" class="meta"></p></div></div>
+        <div class="card-head"><div><p class="eyebrow card-num">Finance</p><h2 id="finance-title">The month so far</h2><p id="finance-meta" class="meta"></p></div></div>
         <div id="finance-body" class="card-body"></div>
       </section>
 
       <section id="integrations" class="card" aria-labelledby="integrations-title" hidden>
-        <div class="card-head"><div><h2 id="integrations-title">Integration status</h2><p class="meta">Whether each connected system is answering</p></div></div>
+        <div class="card-head"><div><p class="eyebrow card-num">Connections</p><h2 id="integrations-title">Are our tools answering?</h2><p class="meta">The systems King Tide OS reads from</p></div></div>
         <div id="integrations-body" class="card-body"></div>
       </section>
     </main>
 
-    <footer class="footer">King Tide OS shows information from your existing tools. To change a record, open it in the tool it came from.</footer>
+    <footer class="footer">
+      <div class="wrap footer-inner">
+        <p class="footer-note">King Tide OS shows information from the tools you already use. To change a record, open it in the tool it came from.</p>
+        <p class="footer-tag"><span>KTC</span> | Built for momentum.</p>
+      </div>
+    </footer>
   </div>
 
   <script src="/app.js" type="module"></script>

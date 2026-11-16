@@ -87,7 +87,7 @@ test('R-07 credentials never reach the browser', async () => {
       for (const secret of ALL_SECRET_VALUES) assert.ok(!text.includes(secret), `${path} must not contain a credential`);
     }
     // Front-end files do not talk to Zoho or mention its credentials at all.
-    for (const file of await readdir(new URL('../public/', import.meta.url))) {
+    for (const file of (await readdir(new URL('../public/', import.meta.url))).filter((f) => /\.(html|js|css)$/.test(f))) {
       const source = await readFile(new URL(`../public/${file}`, import.meta.url), 'utf8');
       assert.ok(!/zohoapis|accounts\.zoho|client_secret|refresh_token/i.test(source), `${file} must not reference Zoho credentials`);
     }

@@ -67,7 +67,7 @@ async function showLogin() {
   const accounts = data?.demoAccounts || [];
   $('demo-accounts').hidden = accounts.length === 0;
   $('demo-account-list').replaceChildren(...accounts.map((a) => {
-    const chip = el('button', { type: 'button', class: 'chip', text: a.role });
+    const chip = el('button', { type: 'button', class: 'chip', text: a.role === 'FOUNDER' ? 'Founder' : a.role });
     chip.addEventListener('click', () => { $('email').value = a.email; requestCode(a.email); });
     return chip;
   }));
@@ -102,7 +102,7 @@ const tiles = new Map(); // key -> { label, value }
 function setTile(key, label, value) {
   tiles.set(key, { label, value });
   $('tiles').replaceChildren(...[...tiles.values()].map((t) =>
-    el('div', { class: 'tile' }, el('span', { class: 'tile-value', text: t.value }), el('span', { class: 'tile-label', text: t.label }))));
+    el('div', { class: 'tile' }, el('span', { class: 'tile-label', text: t.label }), el('span', { class: 'tile-value', text: t.value }))));
 }
 
 const sampleBadge = (data) => (data?.isSampleData ? el('span', { class: 'badge badge--sample', text: 'Sample data' }) : null);
@@ -146,8 +146,8 @@ function renderCustomers(data, body, failure) {
 
   const stages = el('ol', { class: 'tideline', 'aria-label': 'Customers by pipeline stage' },
     ...data.stages.map((s) => el('li', { class: `tideline-stage${s.count ? '' : ' is-empty'}` },
-      el('span', { class: 'tideline-count', text: String(s.count) }),
-      el('span', { class: 'tideline-label', text: s.stage }))));
+      el('span', { class: 'tideline-label', text: s.stage }),
+      el('span', { class: 'tideline-count', text: String(s.count) }))));
 
   const rows = data.customers.map((c) => el('tr', {},
     el('td', { 'data-label': 'Customer', class: 'cell-name' },

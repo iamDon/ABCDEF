@@ -1,0 +1,12 @@
+{
+  "name": "king-tide-os",
+  "version": "0.1.0",
+  "private": true,
+  "description": "King Tide OS — one login, one dashboard, one business snapshot.",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "start": "node server/index.js",
+    "test": "node --test \"test/*.test.js\""
+  }
+}

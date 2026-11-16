@@ -65,3 +65,10 @@ docs/          Game rules and schema docs
 server/        Express + Socket.IO game server (rooms, turns, dice, damage)
 client/        React + Vite front end (splash, lobby, card select, battle)
 ```
+
+
+---
+
+## Also in this repository: King Tide OS
+
+`king-tide-os/` is a separate, self-contained project (a business dashboard) that shares nothing with the card game. See `king-tide-os/README.md`.

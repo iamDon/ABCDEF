@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>King Tide OS</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <!-- Sign-in -->
+  <main id="login-view" class="login" hidden>
+    <div class="login-card">
+      <div class="brand brand--stacked">
+        <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+          <circle cx="24" cy="24" r="23" class="mark-disc"/>
+          <path d="M13 21l4-9 7 7 7-7 4 9z" class="mark-crown"/>
+          <path d="M8 29c4-4 8-4 12 0s8 4 12 0 6-3 8-1" class="mark-wave"/>
+          <path d="M10 36c4-4 8-4 12 0s8 4 12 0 4-2 5-1.5" class="mark-wave mark-wave--soft"/>
+        </svg>
+        <h1>King Tide OS</h1>
+        <p class="tagline">One login. One dashboard. One business snapshot.</p>
+      </div>
+
+      <form id="email-form" novalidate>
+        <label for="email">Work email</label>
+        <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required placeholder="you@company.com">
+        <button type="submit" class="btn btn--primary">Email me a sign-in code</button>
+      </form>
+
+      <form id="code-form" hidden novalidate>
+        <p id="code-sent" class="note"></p>
+        <label for="code">6-digit code</label>
+        <input id="code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" required>
+        <button type="submit" class="btn btn--primary">Sign in</button>
+        <button type="button" id="code-back" class="btn btn--quiet">Use a different email</button>
+      </form>
+
+      <p id="login-error" class="form-error" role="alert" hidden></p>
+
+      <div id="demo-accounts" class="demo-accounts" hidden>
+        <p>Demo mode — sign in as a sample founder:</p>
+        <div id="demo-account-list" class="chip-row"></div>
+      </div>
+    </div>
+    <svg class="login-waves" viewBox="0 0 1440 220" preserveAspectRatio="none" aria-hidden="true">
+      <path class="wave wave--back" d="M0 90c180-50 360-50 540 0s360 50 540 0 240-40 360-20v150H0z"/>
+      <path class="wave wave--mid" d="M0 130c200-45 400-45 600 0s400 45 600 0 160-25 240-15v105H0z"/>
+      <path class="wave wave--front" d="M0 170c160-30 320-30 480 0s320 30 480 0 320-30 480 0v50H0z"/>
+    </svg>
+  </main>
+
+  <!-- Dashboard -->
+  <div id="dashboard-view" hidden>
+    <header class="masthead">
+      <div class="masthead-bar">
+        <div class="brand">
+          <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+            <circle cx="24" cy="24" r="23" class="mark-disc"/>
+            <path d="M13 21l4-9 7 7 7-7 4 9z" class="mark-crown"/>
+            <path d="M8 29c4-4 8-4 12 0s8 4 12 0 6-3 8-1" class="mark-wave"/>
+            <path d="M10 36c4-4 8-4 12 0s8 4 12 0 4-2 5-1.5" class="mark-wave mark-wave--soft"/>
+          </svg>
+          <span class="brand-name">King Tide OS</span>
+        </div>
+        <div class="account">
+          <span id="user-chip" class="user-chip"></span>
+          <button id="sign-out" type="button" class="btn btn--ghost">Sign out</button>
+        </div>
+      </div>
+      <div class="masthead-body">
+        <p id="today" class="eyebrow"></p>
+        <h1 id="greeting"></h1>
+        <p id="sample-banner" class="sample-banner" hidden>Demo environment — every name and number shown is fictional sample data.</p>
+        <div id="tiles" class="tiles" aria-label="Business snapshot"></div>
+      </div>
+      <svg class="masthead-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true">
+        <path class="wave wave--mid" d="M0 22c180-22 360-22 540 0s360 22 540 0 240-18 360-8v46H0z"/>
+        <path class="wave wave--page" d="M0 38c200-20 400-20 600 0s400 20 600 0 160-12 240-6v28H0z"/>
+      </svg>
+    </header>
+
+    <main class="grid">
+      <section id="customers" class="card card--wide" aria-labelledby="customers-title" hidden>
+        <div class="card-head">
+          <div>
+            <h2 id="customers-title">Customers</h2>
+            <p id="customers-meta" class="meta"></p>
+          </div>
+          <button id="customers-refresh" type="button" class="btn btn--outline">Refresh</button>
+        </div>
+        <div id="customers-body" class="card-body" aria-live="polite"></div>
+      </section>
+
+      <section id="projects" class="card" aria-labelledby="projects-title" hidden>
+        <div class="card-head"><div><h2 id="projects-title">Projects</h2><p id="projects-meta" class="meta"></p></div></div>
+        <div id="projects-body" class="card-body"></div>
+      </section>
+
+      <section id="communications" class="card" aria-labelledby="communications-title" hidden>
+        <div class="card-head"><div><h2 id="communications-title">Announcements</h2><p id="communications-meta" class="meta"></p></div></div>
+        <div id="communications-body" class="card-body"></div>
+      </section>
+
+      <section id="finance" class="card" aria-labelledby="finance-title" hidden>
+        <div class="card-head"><div><h2 id="finance-title">Finance snapshot</h2><p id="finance-meta" class="meta"></p></div></div>
+        <div id="finance-body" class="card-body"></div>
+      </section>
+
+      <section id="integrations" class="card" aria-labelledby="integrations-title" hidden>
+        <div class="card-head"><div><h2 id="integrations-title">Integration status</h2><p class="meta">Whether each connected system is answering</p></div></div>
+        <div id="integrations-body" class="card-body"></div>
+      </section>
+    </main>
+
+    <footer class="footer">King Tide OS shows information from your existing tools. To change a record, open it in the tool it came from.</footer>
+  </div>
+
+  <script src="/app.js" type="module"></script>
+</body>
+</html>
